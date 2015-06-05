@@ -1,0 +1,3 @@
+PUBLIC_PASS1_CONSUMES= \
+    src\appplat\test\common\harness\trac\winrt\idl|PASS1 \
+

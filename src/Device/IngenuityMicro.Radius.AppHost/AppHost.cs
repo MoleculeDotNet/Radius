@@ -6,6 +6,8 @@ using IngenuityMicro.Radius.Hardware;
 using IngenuityMicro.Radius.Core;
 using System.Collections;
 using System.Threading;
+using PervasiveDigital.Diagnostics;
+using PervasiveDigital.Utilities;
 
 namespace IngenuityMicro.Radius.AppHost
 {
@@ -25,6 +27,11 @@ namespace IngenuityMicro.Radius.AppHost
             _ble = ble;
             _display = display;
             _mpu = mpu;
+        }
+
+        public void AddApplication(RadiusApplication app)
+        {
+            AddApplication(app, false);
         }
 
         public void AddApplication(RadiusApplication app, bool isDefaultApp)
@@ -47,14 +54,15 @@ namespace IngenuityMicro.Radius.AppHost
             _activeApp.NavigateTo();
         }
 
-        public bool IsActiveApp(RadiusApplication app)
+        public RadiusApplication ActiveApp
         {
-            return _activeApp == app;
+            get { return _activeApp; }
         }
 
 
         public void Run()
         {
+            AddApplication(new AppHostApp());
             Thread.Sleep(Timeout.Infinite);
         }
 
@@ -63,5 +71,33 @@ namespace IngenuityMicro.Radius.AppHost
         public Sharp128 Display { get { return _display; } }
         public Mpu9150 Accelerometer { get { return _mpu; } }
 
+        public void SerialDataReceived(string msg)
+        {
+            // currently, we get our strings already parsed out into lines
+            this.MessageReceived(msg);
+        }
+
+        private void MessageReceived(string msg)
+        {
+            // get the target app
+            if (msg[0] != '#')
+            {
+                //Event: Message introducer not found
+                Logger.Error((AutoTag)0x0000001, LoggingCategories.Host);
+            }
+            var idxEnd = msg.IndexOf('#', 1);
+            if (idxEnd == -1)
+            {
+                //Event: Target-app identifier's terminator was not found
+                Logger.Error((AutoTag)0x0000001, LoggingCategories.Host);
+                return;
+            }
+            var target = msg.Substring(1, idxEnd - 1);
+
+            if (_apps.Contains(target))
+            {
+                ((RadiusApplication)_apps[target]).HandleAppMessage(msg.Substring(idxEnd + 1));
+            }
+        }
     }
 }

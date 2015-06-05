@@ -30,6 +30,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="IAppHost.cs" />
+    <Compile Include="LoggingCategories.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadiusApplication.cs" />
   </ItemGroup>

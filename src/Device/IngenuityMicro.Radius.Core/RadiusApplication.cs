@@ -29,7 +29,7 @@ namespace IngenuityMicro.Radius.Core
         {
             get
             {
-                return _host.IsActiveApp(this);
+                return _host.ActiveApp == this;
             }
         }
 

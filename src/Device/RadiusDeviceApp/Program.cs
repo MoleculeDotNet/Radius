@@ -18,6 +18,7 @@ namespace RadiusDeviceApp
         public static Ble _ble;
         private static Sharp128 _display;
         private static Mpu9150 _mpu;
+        private static AppHost _host;
 
         public static void Main()
         {
@@ -48,14 +49,14 @@ namespace RadiusDeviceApp
             _mpu.setFullScaleAccelRange(2);
 
             //TODO: use some sort of IOC/DI to find these constructor args
-            var host = new AppHost(_buzzer, _ble, _display, _mpu);
-            host.AddApplication(new AnalogClock(), true);
-            host.Run();
+            _host = new AppHost(_buzzer, _ble, _display, _mpu);
+            _host.AddApplication(new AnalogClock(), true);
+            _host.Run();
         }
 
         static void _ble_DataReceived(string val)
         {
-
+            _host.SerialDataReceived(val);
         }
     }
 }
