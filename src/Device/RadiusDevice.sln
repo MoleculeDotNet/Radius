@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngenuityMicro.Radius.Hardware", "IngenuityMicro.Radius.Hardware\IngenuityMicro.Radius.Hardware.csproj", "{D373BE39-544F-4416-B409-67EFCB5540B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngenuityMicro.Radius.Fonts", "IngenuityMicro.Radius.Fonts\IngenuityMicro.Radius.Fonts.csproj", "{AE1C8836-4C7A-42DB-92FE-B1E77C00ADFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadiusDeviceApp", "RadiusDeviceApp\RadiusDeviceApp.csproj", "{15A42D7C-930B-4C5F-906F-EF9E32CEFBEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngenuityMicro.Radius.AppHost", "IngenuityMicro.Radius.AppHost\IngenuityMicro.Radius.AppHost.csproj", "{6F1FEFBC-E387-49C0-ABE8-D793B54FDE79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngenuityMicro.Radius.DefaultApplications", "IngenuityMicro.Radius.DefaultApplications\IngenuityMicro.Radius.DefaultApplications.csproj", "{5CE5462A-3DD5-440B-A565-5F5C629E59ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngenuityMicro.Radius.Core", "IngenuityMicro.Radius.Core\IngenuityMicro.Radius.Core.csproj", "{02A1F93B-2274-4ED7-8148-C9B98039E95E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D373BE39-544F-4416-B409-67EFCB5540B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D373BE39-544F-4416-B409-67EFCB5540B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D373BE39-544F-4416-B409-67EFCB5540B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D373BE39-544F-4416-B409-67EFCB5540B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE1C8836-4C7A-42DB-92FE-B1E77C00ADFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE1C8836-4C7A-42DB-92FE-B1E77C00ADFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE1C8836-4C7A-42DB-92FE-B1E77C00ADFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE1C8836-4C7A-42DB-92FE-B1E77C00ADFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15A42D7C-930B-4C5F-906F-EF9E32CEFBEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15A42D7C-930B-4C5F-906F-EF9E32CEFBEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15A42D7C-930B-4C5F-906F-EF9E32CEFBEC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{15A42D7C-930B-4C5F-906F-EF9E32CEFBEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15A42D7C-930B-4C5F-906F-EF9E32CEFBEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15A42D7C-930B-4C5F-906F-EF9E32CEFBEC}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6F1FEFBC-E387-49C0-ABE8-D793B54FDE79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F1FEFBC-E387-49C0-ABE8-D793B54FDE79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F1FEFBC-E387-49C0-ABE8-D793B54FDE79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F1FEFBC-E387-49C0-ABE8-D793B54FDE79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CE5462A-3DD5-440B-A565-5F5C629E59ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CE5462A-3DD5-440B-A565-5F5C629E59ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CE5462A-3DD5-440B-A565-5F5C629E59ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CE5462A-3DD5-440B-A565-5F5C629E59ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02A1F93B-2274-4ED7-8148-C9B98039E95E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02A1F93B-2274-4ED7-8148-C9B98039E95E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02A1F93B-2274-4ED7-8148-C9B98039E95E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02A1F93B-2274-4ED7-8148-C9B98039E95E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
