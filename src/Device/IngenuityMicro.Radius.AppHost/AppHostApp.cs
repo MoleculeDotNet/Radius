@@ -35,7 +35,7 @@ namespace IngenuityMicro.Radius.AppHost
             get { return "Radius"; }
         }
 
-        public override void HandleAppMessage(string message)
+        public override void HandleAppMessage(int messageId, string message)
         {
         }
     }

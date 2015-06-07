@@ -40,7 +40,7 @@ namespace IngenuityMicro.Radius.DefaultApplications
             get { return "Simple Clock"; }
         }
 
-        public override void HandleAppMessage(string message)
+        public override void HandleAppMessage(int messageId, string message)
         {
         }
 

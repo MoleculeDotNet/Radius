@@ -94,9 +94,15 @@ namespace IngenuityMicro.Radius.AppHost
             }
             var target = msg.Substring(1, idxEnd - 1);
 
+            var start = idxEnd + 1;
+            idxEnd = msg.IndexOf('#', start);
+            if (idxEnd == -1)
+                return;
+            int id = Int32.Parse(msg.Substring(start, idxEnd - 1));
+
             if (_apps.Contains(target))
             {
-                ((RadiusApplication)_apps[target]).HandleAppMessage(msg.Substring(idxEnd + 1));
+                ((RadiusApplication)_apps[target]).HandleAppMessage(id, msg.Substring(idxEnd + 1));
             }
         }
     }

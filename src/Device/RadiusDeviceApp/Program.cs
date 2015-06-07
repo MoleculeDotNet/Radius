@@ -29,7 +29,7 @@ namespace RadiusDeviceApp
 #endif
 
             _display = new Sharp128();
-            _buzzer = new Audio.Buzzer();
+            //_buzzer = new Audio.Buzzer();
 
             _display.DrawBitmap(0, 0, Bmp.FaceBlack, 128, 128, true);
             _display.Render();

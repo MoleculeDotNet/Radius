@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.ApplicationInsights;
+using Ninject;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -26,6 +27,10 @@ namespace RadiusAccessoryApp
     /// </summary>
     public sealed partial class App : Application
     {
+        private static IKernel _kernel;
+
+        public static IKernel DiContainer { get { return _kernel; } }
+
         /// <summary>
         /// Allows tracking page views, exceptions and other telemetry through the Microsoft Application Insights service.
         /// </summary>
@@ -95,6 +100,9 @@ namespace RadiusAccessoryApp
 
                 rootFrame.ContentTransitions = null;
                 rootFrame.Navigated += this.RootFrame_FirstNavigated;
+
+                _kernel = new StandardKernel();
+                _kernel.Load(new IngenuityMicro.Radius.Host.Module());
 
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation

@@ -23,7 +23,7 @@ namespace IngenuityMicro.Radius.Core
 
         public abstract string DisplayName { get; }
 
-        public abstract void HandleAppMessage(string message);
+        public abstract void HandleAppMessage(int messageId, string message);
 
         public bool IsActiveApp
         {

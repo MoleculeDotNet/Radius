@@ -140,6 +140,10 @@
       <Project>{ef582d82-0221-4fa9-81cd-319b5f53083d}</Project>
       <Name>AccessoryManagerAbstractionLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IngenuityMicro.Radius.Host\IngenuityMicro.Radius.Host.csproj">
+      <Project>{32a731bd-7354-4d15-8ac1-59835d26cdef}</Project>
+      <Name>IngenuityMicro.Radius.Host</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
