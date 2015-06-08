@@ -1,6 +1,7 @@
 using System;
 using System.IO.Ports;
 using Microsoft.SPOT;
+using System.Threading;
 
 namespace IngenuityMicro.Radius.Hardware
 {
@@ -18,14 +19,26 @@ namespace IngenuityMicro.Radius.Hardware
                 _bleSerial.DataReceived += _rfSerial_DataReceived;
                 _bleSerial.Open();
             }
-            /// <summary>
-            /// Send data via the Rf Pipe
-            /// </summary>
-            /// <param name="data">Data to send</param>
+
             public void SendData(string data)
             {
-                _bleSerial.WriteLine(data);
+                data += "\r\n";
+                int maxLen = 8;
+                int len = data.Length;
+                int offset = 0;
+                while (true)
+                {
+                    var sendLen = len - offset;
+                    if (sendLen == 0)
+                        break;
+                    if (sendLen > maxLen)
+                        sendLen = maxLen;
+
+                    _bleSerial.Write(data.Substring(offset, sendLen));
+                    offset += sendLen;
+                }
             }
+
             void _rfSerial_DataReceived(object sender, SerialDataReceivedEventArgs e)
             {
                 _dataIn = _bleSerial.Deserialize();

@@ -65,6 +65,10 @@ namespace IngenuityMicro.Radius.AppHost
             var now = new DateTime(year, month, day, hour, minute, iSecond, iMilli);
             now = now.AddMinutes(tzOffset);  //HACK : we should set the local timezone info so that the watch can handle tz/DST transitions by itself
             Utility.SetLocalTime(now);
+
+            var response = new RadiusMessageResponse(messageId);
+            response.Status = 0;
+            this.Host.Send(response);
         }
     }
 }

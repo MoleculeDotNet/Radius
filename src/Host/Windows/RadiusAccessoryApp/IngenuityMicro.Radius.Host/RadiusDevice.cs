@@ -87,11 +87,14 @@ namespace IngenuityMicro.Radius.Host
 
         private void _incomingData_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
-            var buffer = new byte[args.CharacteristicValue.Length];
+            var len = args.CharacteristicValue.Length;
+            Debug.WriteLine("Data received : " + len);
+
+            var buffer = new byte[len];
             DataReader.FromBuffer(args.CharacteristicValue).ReadBytes(buffer);
             _buffer.Put(buffer);
 
-            var idxNewline = _buffer.IndexOf((byte)0x10); // 0x10 == \n
+            var idxNewline = _buffer.IndexOf((byte)0x0a); // 0x0a == \n
             if (idxNewline!=-1)
             {
                 var data = _buffer.Get(idxNewline);
@@ -103,6 +106,7 @@ namespace IngenuityMicro.Radius.Host
 
         public void Send(RadiusMessage msg)
         {
+            _buffer.Clear();  //HACK
             var text = msg.Serialize();
             SendData(text);
             _sentMessages.Add(msg.MessageId, msg);

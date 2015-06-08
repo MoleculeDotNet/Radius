@@ -26,6 +26,67 @@ namespace IngenuityMicro.Radius.Core
                 return null;
         }
 
+        public static string Serialize(object obj)
+        {
+            if (obj is Hashtable)
+                return SerializeDictionary((Hashtable)obj);
+            else if (obj is ArrayList)
+                return SerializeArray((ArrayList)obj);
+            else
+                return null;
+        }
+
+        private static string SerializeDictionary(Hashtable dict)
+        {
+            StringBuilder result = new StringBuilder();
+
+            bool first = true;
+            result.Append('{');
+            foreach (DictionaryEntry item in dict)
+            {
+                if (!first)
+                    result.Append(',');
+                result.Append("\"" + item.Key + "\":");
+                if (item.Value is int || item.Value is double)
+                    result.Append(item.Value.ToString());
+                else if (item.Value is string)
+                    result.Append("\"" + (string)item.Value + "\"");
+                else if (item.Value is Hashtable)
+                    result.Append(SerializeDictionary((Hashtable)item.Value));
+                else if (item.Value is ArrayList)
+                    result.Append(SerializeArray((ArrayList)item.Value));
+                first = false;
+            }
+            result.Append('}');
+
+            return result.ToString();
+        }
+
+        public static string SerializeArray(ArrayList list)
+        {
+            StringBuilder result = new StringBuilder();
+
+            bool first = true;
+            result.Append('[');
+            foreach (object item in list)
+            {
+                if (!first)
+                    result.Append(',');
+                if (item is int || item is double)
+                    result.Append(item.ToString());
+                else if (item is string)
+                    result.Append("\"" + (string)item + "\"");
+                else if (item is Hashtable)
+                    result.Append(SerializeDictionary((Hashtable)item));
+                else if (item is ArrayList)
+                    result.Append(SerializeArray((ArrayList)item));
+                first = false;
+            }
+            result.Append(']');
+
+            return result.ToString();
+        }
+
         private static object DeserializeObject(string json, ref int offset)
         {
             var result = new Hashtable();

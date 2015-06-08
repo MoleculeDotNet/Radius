@@ -18,5 +18,7 @@ namespace IngenuityMicro.Radius.Core
         Sharp128 Display { get; }
         
         Mpu9150 Accelerometer { get; }
+
+        void Send(IRadiusMessage msg);
     }
 }

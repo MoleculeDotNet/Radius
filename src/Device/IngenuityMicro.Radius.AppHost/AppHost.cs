@@ -97,5 +97,11 @@ namespace IngenuityMicro.Radius.AppHost
                 // all exceptions here are ignored - might be parsing errors or app errors, but either way, the show must go on
             }
         }
+
+        public void Send(IRadiusMessage msg)
+        {
+            var text = msg.Serialize();
+            _ble.SendData(text);
+        }
     }
 }
