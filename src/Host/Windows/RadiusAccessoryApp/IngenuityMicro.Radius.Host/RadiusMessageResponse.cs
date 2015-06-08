@@ -9,15 +9,18 @@ namespace IngenuityMicro.Radius.Host
     public class RadiusMessageResponse
     {
         private readonly RadiusMessage _originalMsg;
-        private readonly Dictionary<string, string> _responseArgs;
+        private readonly int _status;
+        private readonly Dictionary<string, object> _responseArgs;
 
-        internal RadiusMessageResponse(RadiusMessage msg, Dictionary<string, string> responseArgs)
+        internal RadiusMessageResponse(RadiusMessage msg, int status, Dictionary<string, object> responseArgs)
         {
             _originalMsg = msg;
+            _status = status;
             _responseArgs = responseArgs;
         }
 
         public RadiusMessage OriginalMessage { get { return _originalMsg; } }
-        public Dictionary<string, string> ResponseValues { get { return _responseArgs; } }
+        public int Status { get { return _status; } }
+        public Dictionary<string, object> ResultValues { get { return _responseArgs; } }
     }
 }

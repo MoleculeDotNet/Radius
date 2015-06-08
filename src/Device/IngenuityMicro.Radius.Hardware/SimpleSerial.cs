@@ -29,7 +29,12 @@ namespace IngenuityMicro.Radius.Hardware
         {
             base.Write(Encoding.UTF8.GetBytes(txt), 0, txt.Length);
         }
- 
+
+        //public void Write(byte[] buffer, int offset, int len)
+        //{
+        //    base.Write(buffer, offset, len);
+        //}
+
         /// <summary>
         /// Writes the specified string and the NewLine value to the output buffer.
         /// </summary>

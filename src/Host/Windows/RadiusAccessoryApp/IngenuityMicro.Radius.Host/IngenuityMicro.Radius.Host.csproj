@@ -82,6 +82,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CircularBuffer.cs" />
+    <Compile Include="Messages\GetInstalledAppsMessage.cs" />
+    <Compile Include="Messages\SetTimeMessage.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadiusDevice.cs" />

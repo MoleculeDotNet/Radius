@@ -1,4 +1,7 @@
-﻿using System;
+﻿using IngenuityMicro.Radius.Host.Messages;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,6 +16,7 @@ namespace IngenuityMicro.Radius.Host
 {
     public class RadiusDevice
     {
+        private readonly RadiusDeviceEnumerator _parent;
         private GattDeviceService _bluetoothGattDeviceService;
         private IReadOnlyList<GattCharacteristic> _readCharacteristic;
         private GattCharacteristic _incomingData;
@@ -21,10 +25,10 @@ namespace IngenuityMicro.Radius.Host
         private bool _fInitialized = false;
         private bool _fFailed = false;
         private CircularBuffer<byte> _buffer = new CircularBuffer<byte>(1024, 1, 1024);
-        private Dictionary<int, RadiusMessage> _sentMessages = new Dictionary<int, RadiusMessage>();
 
-        public RadiusDevice(DeviceInformation di)
+        public RadiusDevice(RadiusDeviceEnumerator parent, DeviceInformation di)
         {
+            _parent = parent;
             _di = di;
 
             Task.Run(() => InitializeAsync());
@@ -50,25 +54,17 @@ namespace IngenuityMicro.Radius.Host
                     _incomingData.ValueChanged += _incomingData_ValueChanged;
                     await _incomingData.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
 
-                    var msg = new RadiusMessage()
-                    {
-                        TargetAppId = "Radius",
-                        Method = "SetTime",
-                    };
-                    msg.Parameters.Add("time", DateTime.UtcNow.ToString("o"));
+                    var setTimeMsg = new SetTimeMessage(this);
+                    setTimeMsg.CurrentUtcTime = DateTime.UtcNow;
                     var tx = TimeZoneInfo.Local;
                     var offset = (int)tx.BaseUtcOffset.TotalMinutes;
                     if (tx.IsDaylightSavingTime(DateTime.Now))
                         offset = offset + 60;
-                    msg.Parameters.Add("tzoffset", (int)offset);
-                    this.Send(msg);
+                    setTimeMsg.TzOffset = offset;
+                    this.Send(setTimeMsg);
 
-                    //msg = new RadiusMessage()
-                    //{
-                    //    TargetAppId = "Radius",
-                    //    Method = "GetInstalledApps"
-                    //};
-                    //this.Send(msg);
+                    var getAppsMsg = new GetInstalledAppsMessage(this);
+                    this.Send(getAppsMsg);
                 }
                 catch (Exception ex)
                 {
@@ -88,8 +84,6 @@ namespace IngenuityMicro.Radius.Host
         private void _incomingData_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
             var len = args.CharacteristicValue.Length;
-            Debug.WriteLine("Data received : " + len);
-
             var buffer = new byte[len];
             DataReader.FromBuffer(args.CharacteristicValue).ReadBytes(buffer);
             _buffer.Put(buffer);
@@ -100,65 +94,59 @@ namespace IngenuityMicro.Radius.Host
                 var data = _buffer.Get(idxNewline);
                 _buffer.Skip(1);
                 var line = ConvertToString(data).Trim();
+                Debug.WriteLine("RECV: (" + this._di.Name + ") : \"" + line + '"');
                 ProcessReceivedData(line);
             }
         }
 
         public void Send(RadiusMessage msg)
         {
-            _buffer.Clear();  //HACK
             var text = msg.Serialize();
+            Debug.WriteLine("SEND: (" + this._di.Name + ") : \"" + text + '"');
             SendData(text);
-            _sentMessages.Add(msg.MessageId, msg);
+            _parent.AddSentMessage(msg);
         }
 
         private void ProcessReceivedData(string line)
         {
-            if (line[0] != '#' && line[0]!='+')  // # is a response, + is an unsolicited message
+            if (line == null || line.Length == 0)
                 return;
 
-            if (line[0] == '#')
-                ProcessResponse(line);
-            else if (line[0] == '+')
-                ProcessEvent(line);
-            else
+            try
             {
-                // Error!
-            }
-        }
-
-        private void ProcessResponse(string line)
-        {
-            var idxEnd = line.IndexOf('#', 1);
-            if (idxEnd == -1)
-                return;
-
-            var target = line.Substring(1, idxEnd - 1);
-
-            var start = idxEnd + 1;
-            idxEnd = line.IndexOf('#', start);
-            if (idxEnd == -1)
-                return;
-            int id;
-            if (!Int32.TryParse(line.Substring(start, idxEnd - 1), out id))
-                return;
-
-            // response to a non-existent message
-            if (!_sentMessages.ContainsKey(id))
-                return;
-
-            var replyArgs = new Dictionary<string, string>();
-            var args = line.Substring(idxEnd + 1).Split('#');
-            foreach (var arg in args)
-            {
-                var tokens = arg.Split('|');
-                if (tokens.Length==2)
+                var jobj = JObject.Parse(line);
+                if (jobj["replyTo"] != null)
                 {
-                    replyArgs.Add(tokens[0], tokens[1]);
+                    // this is a reply
+                    var messageId = (int)jobj["replyTo"];
+                    int status = -1;
+                    if (jobj["status"] != null)
+                        status = (int)jobj["status"];
+
+                    Dictionary<string, object> results = new Dictionary<string, object>();
+                    if (jobj["result"] != null)
+                    {
+                        results = JsonConvert.DeserializeObject<Dictionary<string, object>>(jobj["result"].ToString());
+                    }
+
+                    var msg = _parent.FindSentMessage(messageId);
+                    if (msg != null)
+                    {
+                        bool handled;
+                        msg.OnResponseReceived(new RadiusMessageResponse(msg, status, results), out handled);
+                        if (handled)
+                            _parent.RemoveSentMessage(messageId);
+                    }
+                }
+                else if (jobj["eventId"] != null)
+                {
+
                 }
             }
-
-            _sentMessages[id].OnResponseReceived(this, new RadiusMessageResponse(_sentMessages[id], replyArgs));
+            catch (Exception ex)
+            {
+                // the show must go on
+            }
         }
 
         private void ProcessEvent(string line)

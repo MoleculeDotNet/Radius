@@ -20,5 +20,7 @@ namespace IngenuityMicro.Radius.Core
         Mpu9150 Accelerometer { get; }
 
         void Send(IRadiusMessage msg);
+
+        string[] GetInstalledApps();
     }
 }

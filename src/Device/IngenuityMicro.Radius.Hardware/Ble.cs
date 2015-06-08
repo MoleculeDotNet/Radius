@@ -2,6 +2,7 @@ using System;
 using System.IO.Ports;
 using Microsoft.SPOT;
 using System.Threading;
+using System.Text;
 
 namespace IngenuityMicro.Radius.Hardware
 {
@@ -22,21 +23,7 @@ namespace IngenuityMicro.Radius.Hardware
 
             public void SendData(string data)
             {
-                data += "\r\n";
-                int maxLen = 8;
-                int len = data.Length;
-                int offset = 0;
-                while (true)
-                {
-                    var sendLen = len - offset;
-                    if (sendLen == 0)
-                        break;
-                    if (sendLen > maxLen)
-                        sendLen = maxLen;
-
-                    _bleSerial.Write(data.Substring(offset, sendLen));
-                    offset += sendLen;
-                }
+                _bleSerial.WriteLine(data);
             }
 
             void _rfSerial_DataReceived(object sender, SerialDataReceivedEventArgs e)

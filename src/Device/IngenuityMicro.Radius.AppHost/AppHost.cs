@@ -103,5 +103,20 @@ namespace IngenuityMicro.Radius.AppHost
             var text = msg.Serialize();
             _ble.SendData(text);
         }
+
+        public string[] GetInstalledApps()
+        {
+            var len = _apps.Count;
+            string[] result = new string[len];
+
+            int i = 0;
+            foreach (var item in _apps.Values)
+            {
+                result[i] = ((RadiusApplication)item).UniqueName;
+                ++i;
+            }
+
+            return result;
+        }
     }
 }

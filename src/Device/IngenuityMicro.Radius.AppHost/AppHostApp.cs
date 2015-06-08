@@ -46,6 +46,7 @@ namespace IngenuityMicro.Radius.AppHost
                         this.SetTime(messageId, (string)parms["time"], (int)parms["tzoffset"]);
                     break;
                 case "getinstalledapps":
+                    GetInstalledApps(messageId);
                     break;
                 default:
                     break;
@@ -67,6 +68,16 @@ namespace IngenuityMicro.Radius.AppHost
             Utility.SetLocalTime(now);
 
             var response = new RadiusMessageResponse(messageId);
+            response.Status = 0;
+            this.Host.Send(response);
+        }
+
+        private void GetInstalledApps(int messageId)
+        {
+            var apps = this.Host.GetInstalledApps();
+
+            var response = new RadiusMessageResponse(messageId);
+            response.Parameters.Add("hosts", apps);
             response.Status = 0;
             this.Host.Send(response);
         }

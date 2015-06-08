@@ -9,48 +9,52 @@ using Newtonsoft.Json;
 
 namespace IngenuityMicro.Radius.Host
 {
-    public delegate void RadiusMessageReponseHandler(object sender, RadiusMessageResponse response);
-
-    public class RadiusMessage
+    public abstract class RadiusMessage
     {
-        private string _target;
-        private Dictionary<string, object> _parameters = new Dictionary<string, object>();
-        private int _messageId;
         private static int _globalMessageId;
+        private readonly RadiusDevice _device;
+        private readonly string _target;
+        private readonly string _method;
+        private readonly int _messageId;
+        private Dictionary<string, object> _parameters = new Dictionary<string, object>();
 
-        public event RadiusMessageReponseHandler ResponseReceived;
-
-        public RadiusMessage()
+        public RadiusMessage(RadiusDevice device, string targetApp, string method)
         {
+            _device = device;
+            _target = targetApp;
+            _method = method;
             _messageId = Interlocked.Increment(ref _globalMessageId);
         }
+
+        public DateTime SentTime { get; set; }
 
         public string TargetAppId
         {
             get { return _target; }
-            set { _target = value; }
         }
 
         public int MessageId { get { return _messageId; } }
 
-        public string Method { get; set; }
+        public string Method { get { return _method; } }
 
         public Dictionary<string, object> Parameters
         {
             get { return _parameters; }
         }
 
-        internal string Serialize()
+        public string Serialize()
         {
             var container = new { app = _target, msgid = _messageId, method = this.Method, parms = this.Parameters };
             return JsonConvert.SerializeObject(container);
         }
 
-        internal void OnResponseReceived(object sender, RadiusMessageResponse response)
+        public virtual void OnResponseReceived(RadiusMessageResponse response, out bool handled)
         {
-            if (this.ResponseReceived != null)
-                this.ResponseReceived(sender, response);
+            handled = true;
         }
 
+        public virtual void OnTimeout()
+        {
+        }
     }
 }

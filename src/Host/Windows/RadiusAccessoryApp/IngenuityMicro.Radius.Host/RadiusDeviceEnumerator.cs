@@ -12,6 +12,8 @@ namespace IngenuityMicro.Radius.Host
     public class RadiusDeviceEnumerator
     {
         private Dictionary<string, RadiusDevice> _devices = new Dictionary<string, RadiusDevice>();
+        private Dictionary<int, RadiusMessage> _sentMessages = new Dictionary<int, RadiusMessage>();
+        private object _lock = new object();
 
         public RadiusDeviceEnumerator()
         {
@@ -25,7 +27,35 @@ namespace IngenuityMicro.Radius.Host
             {
                 Debug.WriteLine(d.Name);
                 if (!_devices.ContainsKey(d.Id))
-                    _devices.Add(d.Id,new RadiusDevice(d));
+                    _devices.Add(d.Id,new RadiusDevice(this, d));
+            }
+        }
+
+        internal void AddSentMessage(RadiusMessage msg)
+        {
+            lock (_lock)
+            {
+                msg.SentTime = DateTime.UtcNow;
+                _sentMessages.Add(msg.MessageId, msg);
+            }
+        }
+
+        internal RadiusMessage FindSentMessage(int msgId)
+        {
+            lock (_lock)
+            {
+                if (_sentMessages.ContainsKey(msgId))
+                    return _sentMessages[msgId];
+                else
+                    return null;
+            }
+        }
+
+        internal void RemoveSentMessage(int msgId)
+        {
+            lock (_lock)
+            {
+                _sentMessages.Remove(msgId);
             }
         }
     }

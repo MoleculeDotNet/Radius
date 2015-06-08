@@ -47,14 +47,15 @@ namespace IngenuityMicro.Radius.Core
                 if (!first)
                     result.Append(',');
                 result.Append("\"" + item.Key + "\":");
-                if (item.Value is int || item.Value is double)
-                    result.Append(item.Value.ToString());
-                else if (item.Value is string)
+                var type = item.Value.GetType();
+                if (type==typeof(string))
                     result.Append("\"" + (string)item.Value + "\"");
-                else if (item.Value is Hashtable)
+                else if (type==typeof(Hashtable))
                     result.Append(SerializeDictionary((Hashtable)item.Value));
-                else if (item.Value is ArrayList)
-                    result.Append(SerializeArray((ArrayList)item.Value));
+                else if (type == typeof(ArrayList) || type == typeof(System.Array) || type.BaseType == typeof(System.Array))
+                    result.Append(SerializeArray((IEnumerable)item.Value));
+                else if (type==typeof(int) || type==typeof(double))
+                    result.Append(item.Value.ToString());
                 first = false;
             }
             result.Append('}');
@@ -62,7 +63,7 @@ namespace IngenuityMicro.Radius.Core
             return result.ToString();
         }
 
-        public static string SerializeArray(ArrayList list)
+        public static string SerializeArray(IEnumerable list)
         {
             StringBuilder result = new StringBuilder();
 
@@ -72,14 +73,15 @@ namespace IngenuityMicro.Radius.Core
             {
                 if (!first)
                     result.Append(',');
-                if (item is int || item is double)
-                    result.Append(item.ToString());
-                else if (item is string)
+                var type = item.GetType();
+                if (type==typeof(string))
                     result.Append("\"" + (string)item + "\"");
-                else if (item is Hashtable)
+                else if (type == typeof(Hashtable))
                     result.Append(SerializeDictionary((Hashtable)item));
-                else if (item is ArrayList)
-                    result.Append(SerializeArray((ArrayList)item));
+                else if (type == typeof(ArrayList) || type == typeof(System.Array) || type.BaseType == typeof(System.Array))
+                    result.Append(SerializeArray((IEnumerable)item));
+                else if (type==typeof(int) || type==typeof(double))
+                    result.Append(item.ToString());
                 first = false;
             }
             result.Append(']');
