@@ -3,6 +3,7 @@ using System.Threading;
 using Microsoft.SPOT;
 
 using IngenuityMicro.Radius.Core;
+using System.Collections;
 
 namespace IngenuityMicro.Radius.DefaultApplications
 {
@@ -40,7 +41,7 @@ namespace IngenuityMicro.Radius.DefaultApplications
             get { return "Simple Clock"; }
         }
 
-        public override void HandleAppMessage(int messageId, string message)
+        public override void HandleAppMessage(int messageId, string method, Hashtable parms)
         {
         }
 

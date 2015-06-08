@@ -73,36 +73,28 @@ namespace IngenuityMicro.Radius.AppHost
 
         public void SerialDataReceived(string msg)
         {
-            // currently, we get our strings already parsed out into lines
-            this.MessageReceived(msg);
-        }
-
-        private void MessageReceived(string msg)
-        {
-            // get the target app
-            if (msg[0] != '#')
+            try
             {
-                //Event: Message introducer not found
-                Logger.Error((AutoTag)0x0000001, LoggingCategories.Host);
+                var jsonMsg = Json.Deserialize(msg);
+
+                if (jsonMsg is Hashtable)
+                {
+                    var htMsg = (Hashtable)jsonMsg;
+                    var target = (string)htMsg["app"];
+                    var msgId = (int)htMsg["msgid"];
+                    var method = (string)htMsg["method"];
+                    var parms = (Hashtable)htMsg["parms"];
+
+                    if (_apps.Contains(target))
+                    {
+                        ((RadiusApplication)_apps[target]).HandleAppMessage(msgId, method, parms);
+                    }
+
+                }
             }
-            var idxEnd = msg.IndexOf('#', 1);
-            if (idxEnd == -1)
+            catch (Exception ex)
             {
-                //Event: Target-app identifier's terminator was not found
-                Logger.Error((AutoTag)0x0000001, LoggingCategories.Host);
-                return;
-            }
-            var target = msg.Substring(1, idxEnd - 1);
-
-            var start = idxEnd + 1;
-            idxEnd = msg.IndexOf('#', start);
-            if (idxEnd == -1)
-                return;
-            int id = Int32.Parse(msg.Substring(start, idxEnd - 1));
-
-            if (_apps.Contains(target))
-            {
-                ((RadiusApplication)_apps[target]).HandleAppMessage(id, msg.Substring(idxEnd + 1));
+                // all exceptions here are ignored - might be parsing errors or app errors, but either way, the show must go on
             }
         }
     }

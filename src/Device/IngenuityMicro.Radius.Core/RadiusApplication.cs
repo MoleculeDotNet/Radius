@@ -1,6 +1,7 @@
 using System;
 using Microsoft.SPOT;
 using IngenuityMicro.Radius.Hardware;
+using System.Collections;
 
 namespace IngenuityMicro.Radius.Core
 {
@@ -23,7 +24,7 @@ namespace IngenuityMicro.Radius.Core
 
         public abstract string DisplayName { get; }
 
-        public abstract void HandleAppMessage(int messageId, string message);
+        public abstract void HandleAppMessage(int messageId, string method, Hashtable parms);
 
         public bool IsActiveApp
         {

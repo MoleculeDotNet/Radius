@@ -49,6 +49,21 @@ namespace IngenuityMicro.Radius.Host
                     _incomingData = _bluetoothGattDeviceService.GetCharacteristics(new Guid("4FD800F8-D3B6-48F9-B232-29E95984F76D"))[0];
                     _incomingData.ValueChanged += _incomingData_ValueChanged;
                     await _incomingData.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+
+                    var msg = new RadiusMessage()
+                    {
+                        TargetAppId = "Radius",
+                        Method = "SetTime",
+                    };
+                    msg.Parameters.Add("time", DateTime.UtcNow.ToString("o"));
+                    this.Send(msg);
+
+                    //msg = new RadiusMessage()
+                    //{
+                    //    TargetAppId = "Radius",
+                    //    Method = "GetInstalledApps"
+                    //};
+                    //this.Send(msg);
                 }
                 catch (Exception ex)
                 {
@@ -58,8 +73,6 @@ namespace IngenuityMicro.Radius.Host
             }
             _fInitialized = true;
             _initializedEvent.Set();
-
-            SendData("#Radius#SetTime:");
         }
 
         private void EnsureInitialized()
@@ -136,18 +149,33 @@ namespace IngenuityMicro.Radius.Host
                 }
             }
 
-            _sentMessages[id].OnResponseReceived(this, replyArgs);
+            _sentMessages[id].OnResponseReceived(this, new RadiusMessageResponse(_sentMessages[id], replyArgs));
         }
 
         private void ProcessEvent(string line)
-        { 
+        {
+            throw new NotImplementedException();
         }
 
         private async void SendData(string val)
         {
-            var writer = new DataWriter();
-            writer.WriteString(val + "\r\n");
-            await _readCharacteristic[0].WriteValueAsync(writer.DetachBuffer());
+            val += "\r\n";
+            int maxLen = 16;
+            int len = val.Length;
+            int offset = 0;
+            while (true)
+            {
+                var sendLen = len - offset;
+                if (sendLen == 0)
+                    break;
+                if (sendLen > maxLen)
+                    sendLen = maxLen;
+
+                var writer = new DataWriter();
+                writer.WriteString(val.Substring(offset, sendLen));
+                await _readCharacteristic[0].WriteValueAsync(writer.DetachBuffer());
+                offset += sendLen;
+            }
             // UxOutput.Text = status == GattCommunicationStatus.Success ? "Sent" : "Whoops";
         }
 

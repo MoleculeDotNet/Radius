@@ -5,14 +5,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json;
+
 namespace IngenuityMicro.Radius.Host
 {
-    public delegate void RadiusMessageReponseHandler(object sender, Dictionary<string,string> args);
+    public delegate void RadiusMessageReponseHandler(object sender, RadiusMessageResponse response);
 
     public class RadiusMessage
     {
         private string _target;
-        private Dictionary<string,string> _parameters;
+        private Dictionary<string,string> _parameters = new Dictionary<string,string>();
         private int _messageId;
         private static int _globalMessageId;
 
@@ -31,6 +33,8 @@ namespace IngenuityMicro.Radius.Host
 
         public int MessageId { get { return _messageId; } }
 
+        public string Method { get; set; }
+
         public Dictionary<string, string> Parameters
         {
             get { return _parameters; }
@@ -38,23 +42,14 @@ namespace IngenuityMicro.Radius.Host
 
         internal string Serialize()
         {
-            StringBuilder body = new StringBuilder();
-            if (_parameters.Count == 0)
-                body.Append("#");
-            else
-            {
-                foreach (var item in _parameters)
-                {
-                    body.Append(string.Format("{0}|{1}#", item.Key, item.Value));
-                }
-            }
-            return string.Format("#{0}#{1}#{2}", _target, _messageId, body.ToString());
+            var container = new { app = _target, msgid = _messageId, method = this.Method, parms = this.Parameters };
+            return JsonConvert.SerializeObject(container);
         }
 
-        internal void OnResponseReceived(object sender, Dictionary<string, string> responseArgs)
+        internal void OnResponseReceived(object sender, RadiusMessageResponse response)
         {
             if (this.ResponseReceived != null)
-                this.ResponseReceived(sender, responseArgs);
+                this.ResponseReceived(sender, response);
         }
 
     }

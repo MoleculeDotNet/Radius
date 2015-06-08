@@ -2,6 +2,7 @@ using System;
 using Microsoft.SPOT;
 using IngenuityMicro.Radius.Core;
 using PervasiveDigital.Diagnostics;
+using System.Collections;
 
 namespace IngenuityMicro.Radius.AppHost
 {
@@ -35,7 +36,7 @@ namespace IngenuityMicro.Radius.AppHost
             get { return "Radius"; }
         }
 
-        public override void HandleAppMessage(int messageId, string message)
+        public override void HandleAppMessage(int messageId, string method, Hashtable parms)
         {
         }
     }
