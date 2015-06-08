@@ -26,6 +26,9 @@ namespace IngenuityMicro.Radius.Core
 
         public abstract void HandleAppMessage(int messageId, string method, Hashtable parms);
 
+        // Should this app show up in the app list?
+        public virtual bool IsVisible { get { return true; } }
+
         public bool IsActiveApp
         {
             get
@@ -40,6 +43,11 @@ namespace IngenuityMicro.Radius.Core
 
         public virtual void NavigateTo()
         {
+        }
+
+        public virtual void OnGesture(Gesture gesture, out bool handled)
+        {
+            handled = false;
         }
 
         public Audio.Buzzer Buzzer { get { return _host.Buzzer; } }

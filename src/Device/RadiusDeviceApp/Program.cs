@@ -9,6 +9,7 @@ using IngenuityMicro.Radius.Hardware;
 using IngenuityMicro.Radius.DefaultApplications;
 
 using PervasiveDigital.Diagnostics;
+using IngenuityMicro.Radius.Core;
 
 namespace RadiusDeviceApp
 {
@@ -19,6 +20,11 @@ namespace RadiusDeviceApp
         private static Sharp128 _display;
         private static Mpu9150 _mpu;
         private static AppHost _host;
+        private static I2CDevice _i2CBus;
+        private static Mpr121Touch _touch;
+        private static InterruptPort _sw1 = new InterruptPort((Cpu.Pin)45, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeBoth);
+        private static InterruptPort _sw2 = new InterruptPort((Cpu.Pin)16, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeBoth);
+        //private static InterruptPort _sw3 = new InterruptPort(Pin.PA13, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeLow);
 
         public static void Main()
         {
@@ -28,30 +34,60 @@ namespace RadiusDeviceApp
             Logger.AddListener(listener);
 #endif
 
+            _sw1.OnInterrupt += _sw1_OnInterrupt;
+            _sw2.OnInterrupt += _sw2_OnInterrupt;
+            //_sw3.OnInterrupt += _sw3_OnInterrupt;
+
             _display = new Sharp128();
             //_buzzer = new Audio.Buzzer();
 
-            _display.DrawBitmap(0, 0, Bmp.FaceBlack, 128, 128, true);
-            _display.Render();
-
-            //_i2CBus = new I2CDevice(null);
-            //var padPress = new InterruptPort(Pin.PA4, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeLow);
-            //padPress.OnInterrupt += padPress_OnInterrupt;
-            //_touch = new Mpr121Touch(_i2CBus);
-            //_touch.configure();
+            _i2CBus = new I2CDevice(null);
+            var padPress = new InterruptPort(Pin.PA4, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeLow);
+            padPress.OnInterrupt += padPress_OnInterrupt;
+            _touch = new Mpr121Touch(_i2CBus);
+            _touch.configure();
 
             _ble = new Ble();
             _ble.DataReceived += _ble_DataReceived;
 
-            _mpu = new Mpu9150(0x68, 400, 10, Cpu.Pin.GPIO_NONE);
-            _mpu.Wake();
-            _mpu.setFullScaleGyroRange(2);
-            _mpu.setFullScaleAccelRange(2);
+            //_mpu = new Mpu9150(0x68, 400, 10, Cpu.Pin.GPIO_NONE);
+            //_mpu.Wake();
+            //_mpu.setFullScaleGyroRange(2);
+            //_mpu.setFullScaleAccelRange(2);
 
             //TODO: use some sort of IOC/DI to find these constructor args
             _host = new AppHost(_buzzer, _ble, _display, _mpu);
             _host.AddApplication(new AnalogClock(), true);
+            _host.AddApplication(new MenuApp());
+            _host.AddApplication(new NotificationApp());
             _host.Run();
+        }
+
+        static void _sw1_OnInterrupt(uint data1, uint data2, DateTime time)
+        {
+            // Menu switch pressed - display the main menu
+            _host.LaunchMainMenu();
+        }
+
+        static void _sw2_OnInterrupt(uint data1, uint data2, DateTime time)
+        {
+            // Dismiss button pressed
+            bool handled;
+            _host.ActiveApp.OnGesture(Gesture.Dismiss, out handled);
+            if (!handled)
+            {
+                // The app didn't have anything it could dismiss. We should handle this at the framework level
+                _host.PopAndSwitch();
+            }
+        }
+
+        static void _sw3_OnInterrupt(uint data1, uint data2, DateTime time)
+        {
+        }
+
+        static void padPress_OnInterrupt(uint data1, uint data2, DateTime time)
+        {
+            Debug.Print("Touch: " + data1 + ", " + data2 + ", " + _touch.GetPadTouch());
         }
 
         static void _ble_DataReceived(string val)

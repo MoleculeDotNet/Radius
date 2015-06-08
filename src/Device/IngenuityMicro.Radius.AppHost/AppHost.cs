@@ -20,6 +20,7 @@ namespace IngenuityMicro.Radius.AppHost
         private Hashtable _apps = new Hashtable();
         private RadiusApplication _defaultApp = null;
         private RadiusApplication _activeApp = null;
+        private Stack _appStack = new Stack();
 
         public AppHost(Audio.Buzzer buzzer, Ble ble, Sharp128 display, Mpu9150 mpu)
         {
@@ -46,12 +47,48 @@ namespace IngenuityMicro.Radius.AppHost
                 SwitchTo(app);
         }
 
+        public RadiusApplication FindApplication(string id)
+        {
+            if (_apps.Contains(id))
+                return (RadiusApplication)_apps[id];
+            else
+                return null;
+        }
+
+        public void LaunchMainMenu()
+        {
+            var app = FindApplication("MainMenu");
+            if (app != null)
+                PushAndSwitchTo(app);
+        }
+
+        public void PushAndSwitchTo(RadiusApplication app)
+        {
+            if (_activeApp != app)
+            {
+                _appStack.Push(_activeApp);
+                SwitchTo(app);
+            }
+        }
+
+        public void PopAndSwitch()
+        {
+            if (_appStack.Count == 0)
+                return;
+
+            var returnTo = (RadiusApplication)_appStack.Pop();
+            SwitchTo(returnTo);
+        }
+
         public void SwitchTo(RadiusApplication app)
         {
-            if (_activeApp != null)
-                _activeApp.NavigateAway();
-            _activeApp = app;
-            _activeApp.NavigateTo();
+            if (_activeApp != app)
+            {
+                if (_activeApp != null)
+                    _activeApp.NavigateAway();
+                _activeApp = app;
+                _activeApp.NavigateTo();
+            }
         }
 
         public RadiusApplication ActiveApp

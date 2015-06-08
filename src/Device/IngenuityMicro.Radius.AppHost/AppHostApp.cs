@@ -37,6 +37,8 @@ namespace IngenuityMicro.Radius.AppHost
             get { return "Radius"; }
         }
 
+        public override bool IsVisible { get { return false; } }
+
         public override void HandleAppMessage(int messageId, string method, Hashtable parms)
         {
             switch (method.ToLower())

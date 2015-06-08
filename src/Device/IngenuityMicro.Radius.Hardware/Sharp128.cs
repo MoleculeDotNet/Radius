@@ -123,14 +123,7 @@ namespace IngenuityMicro.Radius.Hardware
                     }
                 }
             }
-
         }
-
-
-
-
-
-
 
         /// <summary>
         /// 
@@ -259,17 +252,17 @@ namespace IngenuityMicro.Radius.Hardware
                     if (textAlign == TextAlign.Left)
                     {
                         x = _x;
-                        //DrawLine(s, lineStart, lineEnd, _x, y, size);
+                        //DrawText(s, lineStart, lineEnd, _x, y, size);
                     }
                     if (textAlign == TextAlign.Center)
                     {
                         x = _x + (int)((width - lineWidth) * 0.5f);
-                        //DrawLine(s, lineStart, lineEnd, _x + (int)((width - lineWidth) * 0.5f), y, size);
+                        //DrawText(s, lineStart, lineEnd, _x + (int)((width - lineWidth) * 0.5f), y, size);
                     }
                     else if (textAlign == TextAlign.Right)
                     {
                         x = _x + width - lineWidth + 1;
-                        //DrawLine(s, lineStart, lineEnd, _x + width - lineWidth+1, y, size);
+                        //DrawText(s, lineStart, lineEnd, _x + width - lineWidth+1, y, size);
                     }
                     if (x < minX)
                     {
@@ -310,17 +303,17 @@ namespace IngenuityMicro.Radius.Hardware
                         if (textAlign == TextAlign.Left)
                         {
                             x = _x;
-                            //DrawLine(s, lineStart, lineEnd, _x, y, size);
+                            //DrawText(s, lineStart, lineEnd, _x, y, size);
                         }
                         if (textAlign == TextAlign.Center)
                         {
                             x = _x + (int)((width - lineWidth) * 0.5f);
-                            //DrawLine(s, lineStart, lineEnd, _x + (int)((width - lineWidth) * 0.5f), y, size);
+                            //DrawText(s, lineStart, lineEnd, _x + (int)((width - lineWidth) * 0.5f), y, size);
                         }
                         else if (textAlign == TextAlign.Right)
                         {
                             x = _x + width - lineWidth + 1;
-                            //DrawLine(s, lineStart, lineEnd, _x + width - lineWidth+1, y, size);
+                            //DrawText(s, lineStart, lineEnd, _x + width - lineWidth+1, y, size);
                         }
                         if (x < minX)
                         {
@@ -375,17 +368,17 @@ namespace IngenuityMicro.Radius.Hardware
                 if (textAlign == TextAlign.Left)
                 {
                     x = _x;
-                    //DrawLine(s, lineStart, lineEnd, _x, y, size);
+                    //DrawText(s, lineStart, lineEnd, _x, y, size);
                 }
                 if (textAlign == TextAlign.Center)
                 {
                     x = _x + (int)((width - lineWidth) * 0.5f);
-                    //DrawLine(s, lineStart, lineEnd, _x + (int)((width - lineWidth) * 0.5f), y, size);
+                    //DrawText(s, lineStart, lineEnd, _x + (int)((width - lineWidth) * 0.5f), y, size);
                 }
                 else if (textAlign == TextAlign.Right)
                 {
                     x = _x + width - lineWidth + 1;
-                    //DrawLine(s, lineStart, lineEnd, _x + width - lineWidth+1, y, size);
+                    //DrawText(s, lineStart, lineEnd, _x + width - lineWidth+1, y, size);
                 }
                 if (x < minX)
                 {
@@ -413,7 +406,7 @@ namespace IngenuityMicro.Radius.Hardware
             for (int i = 0; i < numLines; i++)
             {
                 TextLine tl = textLines[i];
-                DrawLine(s, tl.charStart, tl.charEnd, tl.x, tl.y + yOffset, size, inverted);
+                DrawText(s, tl.charStart, tl.charEnd, tl.x, tl.y + yOffset, size, inverted);
             }
 
             int finalRectX1 = minX;
@@ -424,7 +417,12 @@ namespace IngenuityMicro.Radius.Hardware
             return new int[] { finalRectX1, finalRectY1, finalRectX2, finalRectY2 };
         }
 
-        public void DrawLine(String s, int start, int end, int x, int y, int size, bool inverted)
+        public void DrawText(string s, int x, int y, int size, bool inverted)
+        {
+            DrawText(s, 0, s.Length, x, y, size, inverted);
+        }
+
+        public void DrawText(String s, int start, int end, int x, int y, int size, bool inverted)
         {
             if (end >= start)
             {
@@ -440,10 +438,12 @@ namespace IngenuityMicro.Radius.Hardware
                 }
             }
         }
+
         protected void Swap(ref int a, ref int b)
         {
             var t = a; a = b; b = t;
         }
+
         // bresenham's algorithm - thx wikipedia
         public void DrawLine(int x0, int y0, int x1, int y1, bool color)
         {
@@ -500,7 +500,6 @@ namespace IngenuityMicro.Radius.Hardware
 
         }
 
-
         public void DrawCircle(int x0, int y0, int r, bool color)
         {
             int f = 1 - r;
@@ -539,6 +538,7 @@ namespace IngenuityMicro.Radius.Hardware
             }
 
         }
+
         public int LineHeight(int size)
         {
             return size * 8;

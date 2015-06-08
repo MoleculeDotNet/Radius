@@ -4,6 +4,7 @@ using Microsoft.SPOT;
 
 using IngenuityMicro.Radius.Core;
 using System.Collections;
+using IngenuityMicro.Radius.Hardware;
 
 namespace IngenuityMicro.Radius.DefaultApplications
 {
@@ -80,6 +81,10 @@ namespace IngenuityMicro.Radius.DefaultApplications
 
         public override void NavigateTo()
         {
+            Display.ClearAll(false);
+            Display.DrawBitmap(0, 0, Bmp.FaceBlack, 128, 128, true);
+            Display.Render();
+
             _timer = new Timer(Tick, null, 0, 1000);
         }
     }
