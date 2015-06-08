@@ -10,6 +10,7 @@ using IngenuityMicro.Radius.DefaultApplications;
 
 using PervasiveDigital.Diagnostics;
 using IngenuityMicro.Radius.Core;
+using Microsoft.SPOT.IO;
 
 namespace RadiusDeviceApp
 {

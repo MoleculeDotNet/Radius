@@ -8,8 +8,8 @@ namespace IngenuityMicro.Radius.Host.Messages
 {
     public class SetTimeMessage : RadiusMessage
     {
-        public SetTimeMessage(RadiusDevice device)
-            : base(device, "Radius", "SetTime")
+        public SetTimeMessage()
+            : base("Radius", "SetTime")
         {
         }
 

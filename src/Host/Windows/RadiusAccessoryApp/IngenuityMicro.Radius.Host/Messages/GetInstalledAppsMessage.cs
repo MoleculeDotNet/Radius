@@ -8,8 +8,8 @@ namespace IngenuityMicro.Radius.Host.Messages
 {
     public class GetInstalledAppsMessage : RadiusMessage
     {
-        public GetInstalledAppsMessage(RadiusDevice device)
-            : base(device, "Radius", "GetInstalledApps")
+        public GetInstalledAppsMessage()
+            : base("Radius", "GetInstalledApps")
         {
         }
 

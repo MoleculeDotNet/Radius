@@ -21,6 +21,13 @@
         </m3:DefaultTile>
         <m3:SplashScreen Image="Assets\SplashScreen.png" />
       </m3:VisualElements>
+      <Extensions>
+        <Extension Category="windows.backgroundTasks" EntryPoint="RadiusTaskLib.RadiusBackgroundTask">
+          <BackgroundTasks>
+            <Task Type="systemEvent" />
+          </BackgroundTasks>
+        </Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>
@@ -28,7 +35,7 @@
     <DeviceCapability Name="proximity" />
     <m2:DeviceCapability Name="bluetooth.genericAttributeProfile">
       <m2:Device Id="any">
-        <m2:Function Type="serviceId:2AC94B65-C8F4-48A4-804A-C03BC6960B80"/>
+        <m2:Function Type="serviceId:2AC94B65-C8F4-48A4-804A-C03BC6960B80" />
       </m2:Device>
     </m2:DeviceCapability>
   </Capabilities>

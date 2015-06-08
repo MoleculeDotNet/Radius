@@ -12,15 +12,13 @@ namespace IngenuityMicro.Radius.Host
     public abstract class RadiusMessage
     {
         private static int _globalMessageId;
-        private readonly RadiusDevice _device;
         private readonly string _target;
         private readonly string _method;
         private readonly int _messageId;
         private Dictionary<string, object> _parameters = new Dictionary<string, object>();
 
-        public RadiusMessage(RadiusDevice device, string targetApp, string method)
+        public RadiusMessage(string targetApp, string method)
         {
-            _device = device;
             _target = targetApp;
             _method = method;
             _messageId = Interlocked.Increment(ref _globalMessageId);

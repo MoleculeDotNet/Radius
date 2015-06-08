@@ -54,7 +54,7 @@ namespace IngenuityMicro.Radius.Host
                     _incomingData.ValueChanged += _incomingData_ValueChanged;
                     await _incomingData.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
 
-                    var setTimeMsg = new SetTimeMessage(this);
+                    var setTimeMsg = new SetTimeMessage();
                     setTimeMsg.CurrentUtcTime = DateTime.UtcNow;
                     var tx = TimeZoneInfo.Local;
                     var offset = (int)tx.BaseUtcOffset.TotalMinutes;
@@ -63,7 +63,7 @@ namespace IngenuityMicro.Radius.Host
                     setTimeMsg.TzOffset = offset;
                     this.Send(setTimeMsg);
 
-                    var getAppsMsg = new GetInstalledAppsMessage(this);
+                    var getAppsMsg = new GetInstalledAppsMessage();
                     this.Send(getAppsMsg);
                 }
                 catch (Exception ex)

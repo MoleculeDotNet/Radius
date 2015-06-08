@@ -14,9 +14,9 @@ namespace Microsoft.Phone.AccessoryManager.AbstractionLayer
             AppDisplayName = appdisplayname;
             AppId = appid;
             AccessoryNotificationType = notificationtype;
+            RawNotificationObject = rawData;
             StartedProcessing = startedprocessing;
             TimeCreated = timecreated;
-            RawNotificationObject = rawData;
         }
 
         public string AppDisplayName { get; private set; }

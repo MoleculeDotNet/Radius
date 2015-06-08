@@ -58,5 +58,13 @@ namespace IngenuityMicro.Radius.Host
                 _sentMessages.Remove(msgId);
             }
         }
+
+        public void Send(RadiusMessage msg)
+        {
+            foreach (var dev in _devices.Values)
+            {
+                dev.Send(msg);
+            }
+        }
     }
 }
