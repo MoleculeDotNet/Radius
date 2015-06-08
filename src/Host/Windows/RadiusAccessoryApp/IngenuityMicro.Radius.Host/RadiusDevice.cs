@@ -56,6 +56,11 @@ namespace IngenuityMicro.Radius.Host
                         Method = "SetTime",
                     };
                     msg.Parameters.Add("time", DateTime.UtcNow.ToString("o"));
+                    var tx = TimeZoneInfo.Local;
+                    var offset = (int)tx.BaseUtcOffset.TotalMinutes;
+                    if (tx.IsDaylightSavingTime(DateTime.Now))
+                        offset = offset + 60;
+                    msg.Parameters.Add("tzoffset", (int)offset);
                     this.Send(msg);
 
                     //msg = new RadiusMessage()

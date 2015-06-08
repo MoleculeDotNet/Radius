@@ -14,7 +14,7 @@ namespace IngenuityMicro.Radius.Host
     public class RadiusMessage
     {
         private string _target;
-        private Dictionary<string,string> _parameters = new Dictionary<string,string>();
+        private Dictionary<string, object> _parameters = new Dictionary<string, object>();
         private int _messageId;
         private static int _globalMessageId;
 
@@ -35,7 +35,7 @@ namespace IngenuityMicro.Radius.Host
 
         public string Method { get; set; }
 
-        public Dictionary<string, string> Parameters
+        public Dictionary<string, object> Parameters
         {
             get { return _parameters; }
         }
