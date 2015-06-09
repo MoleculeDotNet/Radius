@@ -33,6 +33,16 @@
   <ItemGroup>
     <Compile Include="Gesture.cs" />
     <Compile Include="IAppHost.cs" />
+    <Compile Include="Interfaces\IAudioAlert.cs" />
+    <Compile Include="Interfaces\IDeviceCapabilities.cs" />
+    <Compile Include="Interfaces\IDisplay.cs" />
+    <Compile Include="Interfaces\IFileSystem.cs" />
+    <Compile Include="Interfaces\IHapticAlert.cs" />
+    <Compile Include="Interfaces\IPeerChannel.cs" />
+    <Compile Include="Interfaces\IVisualAlert.cs" />
+    <Compile Include="IoC\Container.cs" />
+    <Compile Include="IoC\IContainerInstaller.cs" />
+    <Compile Include="IoC\DiContainer.cs" />
     <Compile Include="IRadiusMessage.cs" />
     <Compile Include="Json.cs" />
     <Compile Include="LoggingCategories.cs" />
@@ -62,6 +72,7 @@
       <Name>IngenuityMicro.Radius.Hardware</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Condition="EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <Import Condition="!EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

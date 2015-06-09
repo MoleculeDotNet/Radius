@@ -29,10 +29,10 @@ namespace RadiusDeviceApp
                     var sig = ComputeGestureSignature();
                     switch (sig)
                     {
-                        case 1077: // 8 9 10 - down stroke on left
+                        case 1077:
                             Program.DispatchGesture(Gesture.PageUp);
                             break;
-                        case 1317: // 10 9 8 - up stroke on left
+                        case 1317:
                             Program.DispatchGesture(Gesture.PageDown);
                             break;
                         case 13:
