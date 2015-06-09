@@ -35,12 +35,24 @@
     <Compile Include="Audio.cs" />
     <Compile Include="Ble.cs" />
     <Compile Include="Bmp.cs" />
+    <Compile Include="Flash.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="Mpu9150.cs" />
     <Compile Include="Pin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sharp128.cs" />
     <Compile Include="SimpleSerial.cs" />
+    <Compile Include="TinyFileSystem\BufferedStream.cs" />
+    <Compile Include="TinyFileSystem\FileSystemStructures.cs" />
+    <Compile Include="TinyFileSystem\IBlockDriver.cs" />
+    <Compile Include="TinyFileSystem\MemoryBlockDriver.cs" />
+    <Compile Include="TinyFileSystem\MX25l3206BlockDriver.cs" />
+    <Compile Include="TinyFileSystem\StringTable.cs" />
+    <Compile Include="TinyFileSystem\TinyFileStream.cs" />
+    <Compile Include="TinyFileSystem\TinyFileSystem.cs" />
+    <Compile Include="TinyFileSystem\TinyFileSystemException.cs" />
+    <Compile Include="TinyFileSystem\UInt16Array.cs" />
+    <Compile Include="TinyFileSystem\Utilities.cs" />
     <Compile Include="Touch.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +69,7 @@
       <HintPath>..\packages\PervasiveDigital.Diagnostics.1.0.0\lib\netmf43\PervasiveDigital.Utility.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.IO" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IngenuityMicro.Radius.Fonts\IngenuityMicro.Radius.Fonts.csproj">

@@ -11,6 +11,7 @@ using IngenuityMicro.Radius.DefaultApplications;
 using PervasiveDigital.Diagnostics;
 using IngenuityMicro.Radius.Core;
 using Microsoft.SPOT.IO;
+using NetMF.IO;
 
 namespace RadiusDeviceApp
 {
@@ -23,6 +24,7 @@ namespace RadiusDeviceApp
         private static AppHost _host;
         private static I2CDevice _i2CBus;
         private static Mpr121Touch _touch;
+        private static TinyFileSystem _tfs;
         private static InterruptPort _sw1 = new InterruptPort((Cpu.Pin)45, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeBoth);
         private static InterruptPort _sw2 = new InterruptPort((Cpu.Pin)16, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeBoth);
         //private static InterruptPort _sw3 = new InterruptPort(Pin.PA13, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeLow);
@@ -51,13 +53,23 @@ namespace RadiusDeviceApp
             _ble = new Ble();
             _ble.DataReceived += _ble_DataReceived;
 
+            //TODO: The init fails here if the touch device is initialize - need to investigate why that is.
             //_mpu = new Mpu9150(0x68, 400, 10, Cpu.Pin.GPIO_NONE);
             //_mpu.Wake();
             //_mpu.setFullScaleGyroRange(2);
             //_mpu.setFullScaleAccelRange(2);
 
+#if ENABLE_FILESYSTEM
+            _tfs = Flash.SetUpTfs();
+            if (!_tfs.CheckIfFormatted())
+            {
+                _tfs.Format(); // takes quite awhile
+            }
+            _tfs.Mount();
+#endif
+
             //TODO: use some sort of IOC/DI to find these constructor args
-            _host = new AppHost(_buzzer, _ble, _display, _mpu);
+            _host = new AppHost(_buzzer, _ble, _display, _mpu, _tfs);
             _host.AddApplication(new AnalogClock(), true);
             _host.AddApplication(new MenuApp());
             _host.AddApplication(new NotificationApp());
@@ -88,7 +100,17 @@ namespace RadiusDeviceApp
 
         static void padPress_OnInterrupt(uint data1, uint data2, DateTime time)
         {
-            Debug.Print("Touch: " + data1 + ", " + data2 + ", " + _touch.GetPadTouch());
+            GestureManager.TouchDetected(_touch.GetPadTouch());
+        }
+
+        internal static void DispatchGesture(Gesture gesture)
+        {
+            bool handled;
+            _host.ActiveApp.OnGesture(gesture, out handled);
+            if (!handled)
+            {
+                // Handle according to host semantics
+            }
         }
 
         static void _ble_DataReceived(string val)

@@ -2,6 +2,7 @@ using System;
 using Microsoft.SPOT;
 
 using IngenuityMicro.Radius.Hardware;
+using NetMF.IO;
 
 namespace IngenuityMicro.Radius.Core
 {
@@ -18,6 +19,8 @@ namespace IngenuityMicro.Radius.Core
         Sharp128 Display { get; }
         
         Mpu9150 Accelerometer { get; }
+
+        TinyFileSystem FileSystem { get; }
 
         void Send(IRadiusMessage msg);
 

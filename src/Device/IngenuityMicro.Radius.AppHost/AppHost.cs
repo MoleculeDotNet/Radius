@@ -8,6 +8,7 @@ using System.Collections;
 using System.Threading;
 using PervasiveDigital.Diagnostics;
 using PervasiveDigital.Utilities;
+using NetMF.IO;
 
 namespace IngenuityMicro.Radius.AppHost
 {
@@ -17,17 +18,19 @@ namespace IngenuityMicro.Radius.AppHost
         private Ble _ble;
         private Sharp128 _display;
         private Mpu9150 _mpu;
+        private TinyFileSystem _tfs;
         private Hashtable _apps = new Hashtable();
         private RadiusApplication _defaultApp = null;
         private RadiusApplication _activeApp = null;
         private Stack _appStack = new Stack();
 
-        public AppHost(Audio.Buzzer buzzer, Ble ble, Sharp128 display, Mpu9150 mpu)
+        public AppHost(Audio.Buzzer buzzer, Ble ble, Sharp128 display, Mpu9150 mpu, TinyFileSystem tfs)
         {
             _buzzer = buzzer;
             _ble = ble;
             _display = display;
             _mpu = mpu;
+            _tfs = tfs;
         }
 
         public void AddApplication(RadiusApplication app)
@@ -107,6 +110,7 @@ namespace IngenuityMicro.Radius.AppHost
         public Ble Bluetooth { get { return _ble; } }
         public Sharp128 Display { get { return _display; } }
         public Mpu9150 Accelerometer { get { return _mpu; } }
+        public TinyFileSystem FileSystem { get { return _tfs; } }
 
         public void SerialDataReceived(string msg)
         {
