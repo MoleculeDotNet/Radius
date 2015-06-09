@@ -20,8 +20,8 @@ namespace IngenuityMicro.Radius.AppHost
         private Mpu9150 _mpu;
         private TinyFileSystem _tfs;
         private Hashtable _apps = new Hashtable();
-        private RadiusApplication _defaultApp = null;
-        private RadiusApplication _activeApp = null;
+        private IRadiusApplication _defaultApp = null;
+        private IRadiusApplication _activeApp = null;
         private Stack _appStack = new Stack();
 
         public AppHost(Audio.Buzzer buzzer, Ble ble, Sharp128 display, Mpu9150 mpu, TinyFileSystem tfs)
@@ -83,7 +83,7 @@ namespace IngenuityMicro.Radius.AppHost
             SwitchTo(returnTo);
         }
 
-        public void SwitchTo(RadiusApplication app)
+        public void SwitchTo(IRadiusApplication app)
         {
             if (_activeApp != app)
             {
@@ -94,7 +94,7 @@ namespace IngenuityMicro.Radius.AppHost
             }
         }
 
-        public RadiusApplication ActiveApp
+        public IRadiusApplication ActiveApp
         {
             get { return _activeApp; }
         }

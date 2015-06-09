@@ -15,7 +15,7 @@
 using System;
 using System.Collections;
 
-namespace IngenuityMicro.Radius.Core
+namespace IngenuityMicro.Radius
 {
 	public class Container
 	{

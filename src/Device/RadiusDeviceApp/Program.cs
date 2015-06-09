@@ -3,6 +3,7 @@ using Microsoft.SPOT;
 using Microsoft.SPOT.Hardware;
 using Microsoft.SPOT.Time;
 
+using IngenuityMicro.Radius;
 using IngenuityMicro.Radius.AppHost;
 using IngenuityMicro.Radius.Fonts;
 using IngenuityMicro.Radius.Hardware;

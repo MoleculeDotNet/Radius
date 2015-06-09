@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace IngenuityMicro.Radius.Core
 {
-    public abstract class RadiusApplication
+    public abstract class RadiusApplication : IRadiusApplication
     {
         private IAppHost _host;
 
@@ -50,9 +50,17 @@ namespace IngenuityMicro.Radius.Core
             handled = false;
         }
 
-        public Audio.Buzzer Buzzer { get { return _host.Buzzer; } }
-        public Ble Bluetooth { get{ return _host.Bluetooth; } }
-        public Sharp128 Display { get { return _host.Display; } }
-        public Mpu9150 Accelerometer { get { return _host.Accelerometer; } }
+        private IDisplay _display;
+        public IDisplay Display
+        {
+            get
+            {
+                if (_display == null)
+                {
+                    _display = (IDisplay)DiContainer.Instance.Resolve(typeof(IDisplay));
+                }
+                return _display;
+            }
+        }
     }
 }

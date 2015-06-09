@@ -20,7 +20,7 @@ namespace IngenuityMicro.Radius.Hardware
     /// <summary>
     /// Sharp memory Lcd driver
     /// </summary>
-    public class Sharp128
+    public class Sharp128 : IDisplay
     {
         private SPI _spi;
         private OutputPort Pwr = new OutputPort(Pin.PA2, true);
@@ -109,6 +109,7 @@ namespace IngenuityMicro.Radius.Hardware
                 }
             }
         }
+
         public void DrawBitmap(int x, int y, byte[] bitmap, int w, int h, bool color)
         {
             for (int j = 0; j < h; j++)

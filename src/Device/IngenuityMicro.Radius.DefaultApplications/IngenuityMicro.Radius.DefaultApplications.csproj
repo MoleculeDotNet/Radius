@@ -50,6 +50,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IngenuityMicro.Radius.Common\IngenuityMicro.Radius.Common.csproj">
+      <Project>{A2FC6C4D-DF38-44E6-BF92-52BF0FB0D290}</Project>
+      <Name>IngenuityMicro.Radius.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IngenuityMicro.Radius.Core\IngenuityMicro.Radius.Core.csproj">
       <Project>{02A1F93B-2274-4ED7-8148-C9B98039E95E}</Project>
       <Name>IngenuityMicro.Radius.Core</Name>

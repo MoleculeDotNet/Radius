@@ -1,7 +1,7 @@
 using System;
 using Microsoft.SPOT;
 
-namespace IngenuityMicro.Radius.Core
+namespace IngenuityMicro.Radius
 {
     public interface IPeerChannel
     {

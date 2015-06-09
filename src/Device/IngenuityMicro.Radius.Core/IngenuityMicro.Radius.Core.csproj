@@ -31,19 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Gesture.cs" />
-    <Compile Include="IAppHost.cs" />
-    <Compile Include="Interfaces\IAudioAlert.cs" />
-    <Compile Include="Interfaces\IDeviceCapabilities.cs" />
-    <Compile Include="Interfaces\IDisplay.cs" />
-    <Compile Include="Interfaces\IFileSystem.cs" />
-    <Compile Include="Interfaces\IHapticAlert.cs" />
-    <Compile Include="Interfaces\IPeerChannel.cs" />
-    <Compile Include="Interfaces\IVisualAlert.cs" />
-    <Compile Include="IoC\Container.cs" />
-    <Compile Include="IoC\IContainerInstaller.cs" />
-    <Compile Include="IoC\DiContainer.cs" />
-    <Compile Include="IRadiusMessage.cs" />
     <Compile Include="Json.cs" />
     <Compile Include="LoggingCategories.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,6 +54,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IngenuityMicro.Radius.Common\IngenuityMicro.Radius.Common.csproj">
+      <Project>{A2FC6C4D-DF38-44E6-BF92-52BF0FB0D290}</Project>
+      <Name>IngenuityMicro.Radius.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IngenuityMicro.Radius.Hardware\IngenuityMicro.Radius.Hardware.csproj">
       <Project>{D373BE39-544F-4416-B409-67EFCB5540B6}</Project>
       <Name>IngenuityMicro.Radius.Hardware</Name>

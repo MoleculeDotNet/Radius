@@ -37,6 +37,7 @@
     <Compile Include="Bmp.cs" />
     <Compile Include="Flash.cs" />
     <Compile Include="Font.cs" />
+    <Compile Include="Installer.cs" />
     <Compile Include="Mpu9150.cs" />
     <Compile Include="Pin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,6 +73,10 @@
     <Reference Include="System.IO" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IngenuityMicro.Radius.Common\IngenuityMicro.Radius.Common.csproj">
+      <Project>{A2FC6C4D-DF38-44E6-BF92-52BF0FB0D290}</Project>
+      <Name>IngenuityMicro.Radius.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IngenuityMicro.Radius.Fonts\IngenuityMicro.Radius.Fonts.csproj">
       <Project>{AE1C8836-4C7A-42DB-92FE-B1E77C00ADFD}</Project>
       <Name>IngenuityMicro.Radius.Fonts</Name>

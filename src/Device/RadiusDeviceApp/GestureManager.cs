@@ -1,6 +1,8 @@
 using System;
 using Microsoft.SPOT;
 using System.Threading;
+
+using IngenuityMicro.Radius;
 using IngenuityMicro.Radius.Core;
 
 namespace RadiusDeviceApp
