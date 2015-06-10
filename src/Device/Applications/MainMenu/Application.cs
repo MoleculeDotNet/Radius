@@ -7,8 +7,9 @@ namespace MainMenu
 {
     public class Application : RadiusApplication
     {
-        public override void Initialize(IAppHost host)
+        public override void Initialize(Container container)
         {
+            base.Initialize(container);
             Debug.Print(this.UniqueName + " Initializing...");
         }
 

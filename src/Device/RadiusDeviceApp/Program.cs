@@ -23,9 +23,6 @@ namespace RadiusDeviceApp
         private static AppHost _host;
         private static I2CDevice _i2CBus;
         private static Mpr121Touch _touch;
-#if ENABLE_FILESYSTEM
-        private static TinyFileSystem _tfs;
-#endif
         private static InterruptPort _sw1 = new InterruptPort((Cpu.Pin)45, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeBoth);
         private static InterruptPort _sw2 = new InterruptPort((Cpu.Pin)16, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeBoth);
         //private static InterruptPort _sw3 = new InterruptPort(Pin.PA13, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeLow);
@@ -39,7 +36,8 @@ namespace RadiusDeviceApp
 #endif
 
             DiContainer.Instance.Install(
-                new IngenuityMicro.Radius.Hardware.Installer()
+                new IngenuityMicro.Radius.Hardware.Installer(),
+                new IngenuityMicro.Radius.AppHost.Installer()
                 );
 
             _sw1.OnInterrupt += _sw1_OnInterrupt;
@@ -60,20 +58,19 @@ namespace RadiusDeviceApp
             //_mpu.setFullScaleGyroRange(2);
             //_mpu.setFullScaleAccelRange(2);
 
-#if ENABLE_FILESYSTEM
-            _tfs = Flash.SetUpTfs();
-            if (!_tfs.CheckIfFormatted())
+            var fileSystem = (IFileSystem)DiContainer.Instance.Resolve(typeof(IFileSystem));
+            fileSystem.Initialize();
+            if (!fileSystem.IsFormatted)
             {
-                _tfs.Format(); // takes quite awhile
+                fileSystem.Format(); // takes quite awhile
             }
-            _tfs.Mount();
-#endif
+            fileSystem.Mount();
 
             var channel = (IPeerChannel)DiContainer.Instance.Resolve(typeof(IPeerChannel));
             channel.DataReceived += channel_DataReceived;
 
             //TODO: use some sort of IOC/DI to find these constructor args
-            _host = new AppHost();
+            _host = (AppHost)DiContainer.Instance.Resolve(typeof(IAppHost));
             _host.AddApplication(new AnalogClock(), true);
             _host.AddApplication(new MenuApp());
             _host.AddApplication(new NotificationApp());

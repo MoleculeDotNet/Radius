@@ -9,9 +9,9 @@ namespace IngenuityMicro.Radius.AppHost
 {
     class AppHostApp : RadiusApplication
     {
-        public override void Initialize(IAppHost host)
+        public override void Initialize(Container container)
         {
-            base.Initialize(host);
+            base.Initialize(container);
         }
 
         public override string UniqueName

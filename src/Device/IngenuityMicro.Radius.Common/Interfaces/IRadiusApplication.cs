@@ -6,7 +6,7 @@ namespace IngenuityMicro.Radius
 {
     public interface IRadiusApplication
     {
-        void Initialize(IAppHost host);
+        void Initialize(Container dicontainer);
 
         string UniqueName { get; }
 

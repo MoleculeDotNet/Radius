@@ -12,9 +12,9 @@ namespace IngenuityMicro.Radius
         {
         }
 
-        public virtual void Initialize(IAppHost host)
+        public virtual void Initialize(Container container)
         {
-            _host = host;
+            _host = (IAppHost)container.Resolve(typeof(IAppHost));
         }
 
         protected IAppHost Host { get { return _host; } }

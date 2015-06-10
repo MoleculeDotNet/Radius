@@ -9,18 +9,22 @@ using System.Threading;
 using PervasiveDigital.Diagnostics;
 using PervasiveDigital.Utilities;
 using NetMF.IO;
+using System.Reflection;
+using System.IO;
 
 namespace IngenuityMicro.Radius.AppHost
 {
     public class AppHost : IAppHost
     {
-        private Hashtable _apps = new Hashtable();
+        private readonly IFileSystem _fs;
+        private readonly Hashtable _apps = new Hashtable();
+        private readonly Stack _appStack = new Stack();
         private IRadiusApplication _defaultApp = null;
         private IRadiusApplication _activeApp = null;
-        private Stack _appStack = new Stack();
 
         public AppHost()
         {
+            _fs = (IFileSystem)DiContainer.Instance.Resolve(typeof(IFileSystem));
         }
 
         public void AddApplication(RadiusApplication app)
@@ -35,7 +39,7 @@ namespace IngenuityMicro.Radius.AppHost
             _apps.Add(app.UniqueName, app);
             if (isDefaultApp)
                 _defaultApp = app;
-            app.Initialize(this);
+            app.Initialize(DiContainer.Instance);
             if (isDefaultApp)
                 SwitchTo(app);
         }
@@ -81,6 +85,22 @@ namespace IngenuityMicro.Radius.AppHost
                     _activeApp.NavigateAway();
                 _activeApp = app;
                 _activeApp.NavigateTo();
+            }
+        }
+
+        private void LoadAndInitialize(string name)
+        {
+            using (var stream = _fs.Open(name + ".pe", FileMode.Open))
+            {
+                byte[] assmbytes = new byte[stream.Length];
+                stream.Read(assmbytes, 0, (int)stream.Length);
+
+                var assm = Assembly.Load(assmbytes);
+                var obj = AppDomain.CurrentDomain.CreateInstanceAndUnwrap(assm.FullName, name + ".Application");
+                var type = assm.GetType(name + ".Application");
+                MethodInfo mi = type.GetMethod("Initialize");
+
+                mi.Invoke(obj, new object[] { null });
             }
         }
 

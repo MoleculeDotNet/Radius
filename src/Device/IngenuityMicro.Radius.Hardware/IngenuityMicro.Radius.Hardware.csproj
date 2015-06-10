@@ -35,7 +35,7 @@
     <Compile Include="Audio.cs" />
     <Compile Include="PeerChannel.cs" />
     <Compile Include="Bmp.cs" />
-    <Compile Include="Flash.cs" />
+    <Compile Include="FlashFileSystem.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="Installer.cs" />
     <Compile Include="Mpu9150.cs" />
