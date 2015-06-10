@@ -37,6 +37,11 @@ namespace IngenuityMicro.Radius.Hardware
 
         bool _frameInversion;
 
+        public Sharp128() : this(Pin.PA1, SPI.SPI_module.SPI2)
+        {
+            // explicit 0-arg default constructor required for IoC
+        }
+
         public void PowerDisplay(bool power)
         {
             Pwr.Write(power);

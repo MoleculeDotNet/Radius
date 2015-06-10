@@ -7,21 +7,20 @@ using System.Text;
 namespace IngenuityMicro.Radius.Hardware
 {
 
-        public class Ble
+        public class PeerChannel : IPeerChannel
         {
-            public delegate void RfPipeReceivedHandler(string val);
-            public event RfPipeReceivedHandler DataReceived;
+            public event PeerChannelReceivedHandler DataReceived;
             private readonly SimpleSerial _bleSerial;
             private string[] _dataIn;
 
-            public Ble()
+            public PeerChannel()
             {
                 _bleSerial = new SimpleSerial("COM1", 57600, Parity.None, 8, StopBits.One);
                 _bleSerial.DataReceived += _rfSerial_DataReceived;
                 _bleSerial.Open();
             }
 
-            public void SendData(string data)
+            public void Send(string data)
             {
                 _bleSerial.WriteLine(data);
             }

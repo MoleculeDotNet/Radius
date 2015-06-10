@@ -18,14 +18,14 @@ namespace RadiusDeviceApp
 {
     public class Program
     {
-        private static Audio.Buzzer _buzzer;
-        public static Ble _ble;
-        private static Sharp128 _display;
-        private static Mpu9150 _mpu;
+        //private static Audio.Buzzer _buzzer;
+        //private static Mpu9150 _mpu;
         private static AppHost _host;
         private static I2CDevice _i2CBus;
         private static Mpr121Touch _touch;
+#if ENABLE_FILESYSTEM
         private static TinyFileSystem _tfs;
+#endif
         private static InterruptPort _sw1 = new InterruptPort((Cpu.Pin)45, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeBoth);
         private static InterruptPort _sw2 = new InterruptPort((Cpu.Pin)16, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeBoth);
         //private static InterruptPort _sw3 = new InterruptPort(Pin.PA13, true, Port.ResistorMode.PullUp, Port.InterruptMode.InterruptEdgeLow);
@@ -38,11 +38,14 @@ namespace RadiusDeviceApp
             Logger.AddListener(listener);
 #endif
 
+            DiContainer.Instance.Install(
+                new IngenuityMicro.Radius.Hardware.Installer()
+                );
+
             _sw1.OnInterrupt += _sw1_OnInterrupt;
             _sw2.OnInterrupt += _sw2_OnInterrupt;
             //_sw3.OnInterrupt += _sw3_OnInterrupt;
 
-            _display = new Sharp128();
             //_buzzer = new Audio.Buzzer();
 
             _i2CBus = new I2CDevice(null);
@@ -50,9 +53,6 @@ namespace RadiusDeviceApp
             padPress.OnInterrupt += padPress_OnInterrupt;
             _touch = new Mpr121Touch(_i2CBus);
             _touch.configure();
-
-            _ble = new Ble();
-            _ble.DataReceived += _ble_DataReceived;
 
             //TODO: The init fails here if the touch device is initialize - need to investigate why that is.
             //_mpu = new Mpu9150(0x68, 400, 10, Cpu.Pin.GPIO_NONE);
@@ -69,12 +69,20 @@ namespace RadiusDeviceApp
             _tfs.Mount();
 #endif
 
+            var channel = (IPeerChannel)DiContainer.Instance.Resolve(typeof(IPeerChannel));
+            channel.DataReceived += channel_DataReceived;
+
             //TODO: use some sort of IOC/DI to find these constructor args
-            _host = new AppHost(_buzzer, _ble, _display, _mpu, _tfs);
+            _host = new AppHost();
             _host.AddApplication(new AnalogClock(), true);
             _host.AddApplication(new MenuApp());
             _host.AddApplication(new NotificationApp());
             _host.Run();
+        }
+
+        static void channel_DataReceived(string val)
+        {
+            _host.SerialDataReceived(val);
         }
 
         static void _sw1_OnInterrupt(uint data1, uint data2, DateTime time)
@@ -112,11 +120,6 @@ namespace RadiusDeviceApp
             {
                 // Handle according to host semantics
             }
-        }
-
-        static void _ble_DataReceived(string val)
-        {
-            _host.SerialDataReceived(val);
         }
     }
 }

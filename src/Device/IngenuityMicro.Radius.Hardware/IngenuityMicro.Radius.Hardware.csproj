@@ -33,7 +33,7 @@
   <ItemGroup>
     <Compile Include="AbstractI2CDevice.cs" />
     <Compile Include="Audio.cs" />
-    <Compile Include="Ble.cs" />
+    <Compile Include="PeerChannel.cs" />
     <Compile Include="Bmp.cs" />
     <Compile Include="Flash.cs" />
     <Compile Include="Font.cs" />
