@@ -1,9 +1,8 @@
 using System;
 using Microsoft.SPOT;
-using IngenuityMicro.Radius.Hardware;
 using System.Collections;
 
-namespace IngenuityMicro.Radius.Core
+namespace IngenuityMicro.Radius
 {
     public abstract class RadiusApplication : IRadiusApplication
     {

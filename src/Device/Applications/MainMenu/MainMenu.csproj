@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
-    <AssemblyName>MFIngenuityMicro.Radius.Common</AssemblyName>
+    <AssemblyName>MainMenu</AssemblyName>
     <OutputType>Library</OutputType>
-    <RootNamespace>IngenuityMicro.Radius</RootNamespace>
+    <RootNamespace>MainMenu</RootNamespace>
     <ProjectTypeGuids>{b69e3092-b931-443c-abe7-7e7b65f2a37f};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A2FC6C4D-DF38-44E6-BF92-52BF0FB0D290}</ProjectGuid>
+    <ProjectGuid>{789EBEF2-D46C-4BD5-B911-28083A9FD0C5}</ProjectGuid>
     <TargetFrameworkVersion>v4.3</TargetFrameworkVersion>
     <NetMfTargetsBaseDir Condition="'$(NetMfTargetsBaseDir)'==''">$(MSBuildExtensionsPath32)\Microsoft\.NET Micro Framework\</NetMfTargetsBaseDir>
   </PropertyGroup>
@@ -29,25 +29,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Gesture.cs" />
-    <Compile Include="Interfaces\IAppHost.cs" />
-    <Compile Include="Interfaces\IAudioAlert.cs" />
-    <Compile Include="Interfaces\IDeviceCapabilities.cs" />
-    <Compile Include="Interfaces\IDisplay.cs" />
-    <Compile Include="Interfaces\IFileSystem.cs" />
-    <Compile Include="Interfaces\IHapticAlert.cs" />
-    <Compile Include="Interfaces\IPeerChannel.cs" />
-    <Compile Include="Interfaces\IRadiusApplication.cs" />
-    <Compile Include="Interfaces\IRadiusMessage.cs" />
-    <Compile Include="Interfaces\IVisualAlert.cs" />
-    <Compile Include="IoC\Container.cs" />
-    <Compile Include="IoC\DiContainer.cs" />
-    <Compile Include="IoC\IContainerInstaller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RadiusApplication.cs" />
+    <Compile Include="Application.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.SPOT.Native" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\IngenuityMicro.Radius.Common\IngenuityMicro.Radius.Common.csproj">
+      <Project>{A2FC6C4D-DF38-44E6-BF92-52BF0FB0D290}</Project>
+      <Name>IngenuityMicro.Radius.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Condition="EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <Import Condition="!EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
