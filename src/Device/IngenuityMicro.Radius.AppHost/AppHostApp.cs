@@ -1,7 +1,6 @@
 using System;
 using Microsoft.SPOT;
 using IngenuityMicro.Radius.Core;
-using PervasiveDigital.Diagnostics;
 using System.Collections;
 using Microsoft.SPOT.Hardware;
 
@@ -9,9 +8,8 @@ namespace IngenuityMicro.Radius.AppHost
 {
     class AppHostApp : RadiusApplication
     {
-        public override void Initialize(Container container)
+        public override void Initialize()
         {
-            base.Initialize(container);
         }
 
         public override string UniqueName
@@ -21,17 +19,14 @@ namespace IngenuityMicro.Radius.AppHost
 
         public override void NavigateAway()
         {
-            base.NavigateAway();
-            //Event: You cannot navigate away from this app and it should never become active.  It exists only to sink messages for the app host.
-            Logger.Critical((AutoTag)0x00000000, LoggingCategories.Host);
+            throw new NotSupportedException();
         }
 
         public override void NavigateTo()
         {
-            base.NavigateTo();
-            //Event: You cannot navigate to this app and it should never become active. It exists only to sink messages for the app host.
-            Logger.Critical((AutoTag)0x00000000, LoggingCategories.Host);
+            throw new NotSupportedException();
         }
+
         public override string DisplayName
         {
             get { return "Radius"; }

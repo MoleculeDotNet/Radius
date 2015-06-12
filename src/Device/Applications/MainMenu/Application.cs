@@ -7,15 +7,14 @@ namespace MainMenu
 {
     public class Application : RadiusApplication
     {
-        public override void Initialize(Container container)
+        public override void Initialize()
         {
-            base.Initialize(container);
             Debug.Print(this.UniqueName + " Initializing...");
         }
 
         public override string UniqueName
         {
-            get { return this.GetType().FullName; }
+            get { return "MainMenu"; }  // must match pe name for now
         }
 
         public override string DisplayName
@@ -29,10 +28,16 @@ namespace MainMenu
 
         public override void NavigateAway()
         {
+            base.NavigateAway();
         }
 
         public override void NavigateTo()
         {
+            base.NavigateTo();
+            Display.ClearAll(true);
+            Display.DrawText("This is a test", 0, 20, 1, false);
+            Display.DrawText("This is another test", 0, 40, 1, true);
+            Display.Render();
         }
 
         public override void OnGesture(Gesture gesture, out bool handled)

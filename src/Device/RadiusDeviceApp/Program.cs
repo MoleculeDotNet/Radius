@@ -7,11 +7,8 @@ using IngenuityMicro.Radius;
 using IngenuityMicro.Radius.AppHost;
 using IngenuityMicro.Radius.Fonts;
 using IngenuityMicro.Radius.Hardware;
-using IngenuityMicro.Radius.DefaultApplications;
 
-using PervasiveDigital.Diagnostics;
 using IngenuityMicro.Radius.Core;
-using Microsoft.SPOT.IO;
 using NetMF.IO;
 
 namespace RadiusDeviceApp
@@ -29,11 +26,7 @@ namespace RadiusDeviceApp
 
         public static void Main()
         {
-            Logger.MinimumSeverityToLog = Severity.Info;
-#if DEBUG
-            var listener = new DebugPrintListener();
-            Logger.AddListener(listener);
-#endif
+            Debug.EnableGCMessages(true);
 
             DiContainer.Instance.Install(
                 new IngenuityMicro.Radius.Hardware.Installer(),
@@ -71,9 +64,6 @@ namespace RadiusDeviceApp
 
             //TODO: use some sort of IOC/DI to find these constructor args
             _host = (AppHost)DiContainer.Instance.Resolve(typeof(IAppHost));
-            _host.AddApplication(new AnalogClock(), true);
-            _host.AddApplication(new MenuApp());
-            _host.AddApplication(new NotificationApp());
             _host.Run();
         }
 

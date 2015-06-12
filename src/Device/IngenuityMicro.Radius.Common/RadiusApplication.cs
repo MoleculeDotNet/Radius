@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace IngenuityMicro.Radius
 {
-    public abstract class RadiusApplication : IRadiusApplication
+    public abstract class RadiusApplication : MarshalByRefObject, IRadiusApplication
     {
         private IAppHost _host;
 
@@ -12,10 +12,15 @@ namespace IngenuityMicro.Radius
         {
         }
 
-        public virtual void Initialize(Container container)
+        public void InitializeFramework()
         {
-            _host = (IAppHost)container.Resolve(typeof(IAppHost));
+            //TODO: Initialize DI container with drivers
+
+            // Call app-specific initialization
+            this.Initialize();
         }
+
+        public abstract void Initialize();
 
         protected IAppHost Host { get { return _host; } }
 

@@ -6,8 +6,6 @@ using IngenuityMicro.Radius.Hardware;
 using IngenuityMicro.Radius.Core;
 using System.Collections;
 using System.Threading;
-using PervasiveDigital.Diagnostics;
-using PervasiveDigital.Utilities;
 using NetMF.IO;
 using System.Reflection;
 using System.IO;
@@ -19,52 +17,31 @@ namespace IngenuityMicro.Radius.AppHost
         private readonly IFileSystem _fs;
         private readonly Hashtable _apps = new Hashtable();
         private readonly Stack _appStack = new Stack();
-        private IRadiusApplication _defaultApp = null;
+        private string _defaultApp = null;
         private IRadiusApplication _activeApp = null;
+        private AppDomain _currentAppDomain = null;
 
         public AppHost()
         {
             _fs = (IFileSystem)DiContainer.Instance.Resolve(typeof(IFileSystem));
         }
 
-        public void AddApplication(RadiusApplication app)
-        {
-            AddApplication(app, false);
-        }
-
-        public void AddApplication(RadiusApplication app, bool isDefaultApp)
-        {
-            if (_apps.Contains(app.UniqueName))
-                _apps.Remove(app.UniqueName);
-            _apps.Add(app.UniqueName, app);
-            if (isDefaultApp)
-                _defaultApp = app;
-            app.Initialize(DiContainer.Instance);
-            if (isDefaultApp)
-                SwitchTo(app);
-        }
-
-        public RadiusApplication FindApplication(string id)
-        {
-            if (_apps.Contains(id))
-                return (RadiusApplication)_apps[id];
-            else
-                return null;
-        }
-
         public void LaunchMainMenu()
         {
-            var app = FindApplication("MainMenu");
-            if (app != null)
-                PushAndSwitchTo(app);
+            PushAndSwitchTo("MainMenu");
         }
 
-        public void PushAndSwitchTo(RadiusApplication app)
+        public void PushAndSwitchTo(string appId)
         {
-            if (_activeApp != app)
+            if (_activeApp.UniqueName != appId)
             {
-                _appStack.Push(_activeApp);
-                SwitchTo(app);
+                _appStack.Push(_activeApp.UniqueName);
+                // If launching the new app fails, switch back
+                if (!SwitchTo(appId))
+                {
+                    //TODO: Alert the user
+                    PopAndSwitch();
+                }
             }
         }
 
@@ -73,35 +50,74 @@ namespace IngenuityMicro.Radius.AppHost
             if (_appStack.Count == 0)
                 return;
 
-            var returnTo = (RadiusApplication)_appStack.Pop();
-            SwitchTo(returnTo);
+            var returnTo = (string)_appStack.Pop();
+            if (!SwitchTo(returnTo))
+            {
+                //TODO: Alert the user and pop again or go back to default app
+            }
         }
 
-        public void SwitchTo(IRadiusApplication app)
+        public bool SwitchTo(string appId)
         {
-            if (_activeApp != app)
+            bool success = false;
+
+            if (_activeApp==null || _activeApp.UniqueName != appId)
             {
                 if (_activeApp != null)
                     _activeApp.NavigateAway();
-                _activeApp = app;
-                _activeApp.NavigateTo();
+
+                if (_currentAppDomain != null && _currentAppDomain != AppDomain.CurrentDomain)
+                    AppDomain.Unload(_currentAppDomain);
+
+                IRadiusApplication newApp = LoadAndInitialize(appId);
+
+                if (newApp!=null)
+                {
+                    _activeApp = newApp;
+                    _activeApp.NavigateTo();
+                    success = true;
+                }
             }
+            return success;
         }
 
-        private void LoadAndInitialize(string name)
+        //TODO: Separate the file name from app id so that app ids can be longer than 13 chars
+        private IRadiusApplication LoadAndInitialize(string appId)
         {
-            using (var stream = _fs.Open(name + ".pe", FileMode.Open))
+            IRadiusApplication result = null;
+
+            try
             {
-                byte[] assmbytes = new byte[stream.Length];
-                stream.Read(assmbytes, 0, (int)stream.Length);
+                using (var stream = _fs.Open(appId + ".pe", FileMode.Open))
+                {
+                    byte[] assmbytes = new byte[stream.Length];
+                    stream.Read(assmbytes, 0, (int)stream.Length);
 
-                var assm = Assembly.Load(assmbytes);
-                var obj = AppDomain.CurrentDomain.CreateInstanceAndUnwrap(assm.FullName, name + ".Application");
-                var type = assm.GetType(name + ".Application");
-                MethodInfo mi = type.GetMethod("Initialize");
+                    AppDomain domain = null;
+                    try
+                    {
+                        var assm = Assembly.Load(assmbytes);
+                        domain = AppDomain.CreateDomain(appId);
+                        var obj = domain.CreateInstanceAndUnwrap(assm.FullName, appId + ".Application");
+                        var type = assm.GetType(appId + ".Application");
+                        MethodInfo mi = type.GetMethod("InitializeFramework");
+                        mi.Invoke(obj, null);
 
-                mi.Invoke(obj, new object[] { null });
+                        result = (IRadiusApplication)obj;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Print(ex.ToString());
+                        result = null;
+                    }
+                }
             }
+            catch (Exception exc)
+            {
+                Debug.Print(exc.ToString());
+                result = null;
+            }
+            return result;
         }
 
         public IRadiusApplication ActiveApp
@@ -112,7 +128,11 @@ namespace IngenuityMicro.Radius.AppHost
 
         public void Run()
         {
-            AddApplication(new AppHostApp());
+            // Add the protocol handler for the host environment (maybe should be loadable?)
+            //AddApplication(new AppHostApp());
+
+            // Launch the default watch-face app
+            SwitchTo("AnalogClock");
             Thread.Sleep(Timeout.Infinite);
         }
 

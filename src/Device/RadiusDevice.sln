@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadiusDeviceApp", "RadiusDe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngenuityMicro.Radius.AppHost", "IngenuityMicro.Radius.AppHost\IngenuityMicro.Radius.AppHost.csproj", "{6F1FEFBC-E387-49C0-ABE8-D793B54FDE79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngenuityMicro.Radius.DefaultApplications", "IngenuityMicro.Radius.DefaultApplications\IngenuityMicro.Radius.DefaultApplications.csproj", "{5CE5462A-3DD5-440B-A565-5F5C629E59ED}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IngenuityMicro.Radius.Core", "IngenuityMicro.Radius.Core\IngenuityMicro.Radius.Core.csproj", "{02A1F93B-2274-4ED7-8148-C9B98039E95E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D53B69A0-2CD3-4DED-A708-EB4BA2957E20}"
@@ -64,10 +62,6 @@ Global
 		{6F1FEFBC-E387-49C0-ABE8-D793B54FDE79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F1FEFBC-E387-49C0-ABE8-D793B54FDE79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F1FEFBC-E387-49C0-ABE8-D793B54FDE79}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5CE5462A-3DD5-440B-A565-5F5C629E59ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5CE5462A-3DD5-440B-A565-5F5C629E59ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5CE5462A-3DD5-440B-A565-5F5C629E59ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5CE5462A-3DD5-440B-A565-5F5C629E59ED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{02A1F93B-2274-4ED7-8148-C9B98039E95E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{02A1F93B-2274-4ED7-8148-C9B98039E95E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02A1F93B-2274-4ED7-8148-C9B98039E95E}.Release|Any CPU.ActiveCfg = Release|Any CPU

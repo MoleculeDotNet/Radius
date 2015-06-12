@@ -59,6 +59,7 @@
       <Name>IngenuityMicro.Radius.Hardware</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\AnalogClock.pe" />
     <None Include="Resources\MainMenu.pe" />

@@ -1,7 +1,7 @@
 using System;
 using Microsoft.SPOT;
 
-namespace IngenuityMicro.Radius.Hardware
+namespace AnalogClock
 {
     public class Bmp
     {

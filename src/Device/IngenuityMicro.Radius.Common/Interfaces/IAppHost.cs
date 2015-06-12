@@ -5,7 +5,7 @@ namespace IngenuityMicro.Radius
 {
     public interface IAppHost
     {
-        void SwitchTo(IRadiusApplication app);
+        bool SwitchTo(string appOd);
 
         IRadiusApplication ActiveApp { get; }
 

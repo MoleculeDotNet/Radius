@@ -34,7 +34,6 @@
     <Compile Include="AbstractI2CDevice.cs" />
     <Compile Include="Audio.cs" />
     <Compile Include="PeerChannel.cs" />
-    <Compile Include="Bmp.cs" />
     <Compile Include="FlashFileSystem.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="Installer.cs" />
@@ -46,7 +45,6 @@
     <Compile Include="TinyFileSystem\BufferedStream.cs" />
     <Compile Include="TinyFileSystem\FileSystemStructures.cs" />
     <Compile Include="TinyFileSystem\IBlockDriver.cs" />
-    <Compile Include="TinyFileSystem\MemoryBlockDriver.cs" />
     <Compile Include="TinyFileSystem\MX25l3206BlockDriver.cs" />
     <Compile Include="TinyFileSystem\StringTable.cs" />
     <Compile Include="TinyFileSystem\TinyFileStream.cs" />
@@ -62,14 +60,6 @@
     <Reference Include="Microsoft.SPOT.Hardware.SerialPort" />
     <Reference Include="Microsoft.SPOT.Native" />
     <Reference Include="Microsoft.SPOT.Time" />
-    <Reference Include="PervasiveDigital.Diagnostics, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PervasiveDigital.Diagnostics.1.0.0\lib\netmf43\PervasiveDigital.Diagnostics.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PervasiveDigital.Utility, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PervasiveDigital.Diagnostics.1.0.0\lib\netmf43\PervasiveDigital.Utility.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.IO" />
   </ItemGroup>
   <ItemGroup>
@@ -81,9 +71,6 @@
       <Project>{AE1C8836-4C7A-42DB-92FE-B1E77C00ADFD}</Project>
       <Name>IngenuityMicro.Radius.Fonts</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Condition="EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <Import Condition="!EXISTS('$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets')" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

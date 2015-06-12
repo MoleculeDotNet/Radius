@@ -31,10 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="MenuApp.cs" />
     <Compile Include="NotificationApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AnalogClock.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.SPOT.Hardware" />
