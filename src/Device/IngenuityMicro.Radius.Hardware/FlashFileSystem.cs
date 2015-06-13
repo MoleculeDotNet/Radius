@@ -12,7 +12,6 @@ namespace IngenuityMicro.Radius.Hardware
 
         public void Initialize()
         {
-            Debug.Print("Before : " + Debug.GC(true));
             var spiConfig = new SPI.Configuration(Pin.PB12, false, 0, 0, false, true, 12000, SPI.SPI_module.SPI1);
             var spi = new SPI(spiConfig);
 
@@ -21,7 +20,6 @@ namespace IngenuityMicro.Radius.Hardware
 
             // Instantiate the file system passing the block driver for the underlying storage medium
             _tfs = new TinyFileSystem(driver);
-            Debug.Print("After : " + Debug.GC(true));
         }
 
         public bool IsFormatted

@@ -133,6 +133,7 @@ namespace IngenuityMicro.Radius.AppHost
 
             // Launch the default watch-face app
             SwitchTo("AnalogClock");
+            //SwitchTo("MainMenu");
             Thread.Sleep(Timeout.Infinite);
         }
 

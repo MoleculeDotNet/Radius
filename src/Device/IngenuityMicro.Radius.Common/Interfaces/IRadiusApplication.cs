@@ -16,8 +16,6 @@ namespace IngenuityMicro.Radius
 
         bool IsVisible { get; }
 
-        bool IsActiveApp { get; }
-
         void NavigateAway();
 
         void NavigateTo();

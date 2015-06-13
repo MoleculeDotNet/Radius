@@ -33,14 +33,6 @@ namespace IngenuityMicro.Radius
         // Should this app show up in the app list?
         public virtual bool IsVisible { get { return true; } }
 
-        public bool IsActiveApp
-        {
-            get
-            {
-                return _host.ActiveApp == this;
-            }
-        }
-
         public virtual void NavigateAway()
         {
         }

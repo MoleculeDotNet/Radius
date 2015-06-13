@@ -24,6 +24,12 @@ namespace AnalogClock
         public override void Initialize()
         {
             Debug.Print(this.UniqueName + " Initializing...");
+
+            DiContainer.Instance.Install(
+                new IngenuityMicro.Radius.Hardware.AppEnvironmentInstaller()
+                );
+
+            Debug.Print(this.UniqueName + " Initialization complete");
         }
 
         public override string UniqueName
@@ -62,9 +68,6 @@ namespace AnalogClock
 
         private void Tick(object o)
         {
-            if (!IsActiveApp)
-                return;
-
             Display.DrawLine(64, 64, _hourX, _hourY, true);
             Display.DrawLine(64, 64, _minuteX, _minuteY, true);
             Display.DrawLine(64, 64, _secondX, _secondY, true);

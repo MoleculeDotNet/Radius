@@ -29,7 +29,7 @@ namespace RadiusDeviceApp
             Debug.EnableGCMessages(true);
 
             DiContainer.Instance.Install(
-                new IngenuityMicro.Radius.Hardware.Installer(),
+                new IngenuityMicro.Radius.Hardware.HostEnvironmentInstaller(),
                 new IngenuityMicro.Radius.AppHost.Installer()
                 );
 
